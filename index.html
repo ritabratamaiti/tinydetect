@@ -1,42 +1,54 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TinyDetect: AI text &amp; image detection that never leaves your browser</title>
+<title>TinyDetect — AI detection that runs in your browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#16181d;--mut:#5d6470;--line:#e3e6ea;--bg:#fbfbfa;--ai:#c2410c;--hu:#15803d;--acc:#2f5bd3}
-*{box-sizing:border-box}body{margin:0;font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
-main{max-width:860px;margin:0 auto;padding:28px 18px 60px}h1{font-size:28px;margin:0 0 4px}.sub{color:var(--mut);margin:0 0 18px}
-.pill{display:inline-block;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;margin:0 6px 6px 0;background:#fff}
-.tabs{display:flex;gap:6px;margin:18px 0 10px}.tab{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:600}
-.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
-textarea{width:100%;min-height:180px;border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit;resize:vertical}
-button.go{margin-top:10px;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer}button.go:disabled{opacity:.5}
-.drop{border:2px dashed var(--line);border-radius:10px;padding:26px;text-align:center;color:var(--mut);cursor:pointer}.drop.hov{border-color:var(--acc)}
-#imgprev{max-width:100%;max-height:300px;display:block;margin:10px auto;border-radius:8px}
-.res{margin-top:14px;display:none}.bar{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--hu),#eab308,var(--ai));position:relative}
-.mark{position:absolute;top:-5px;width:4px;height:22px;background:var(--ink);border-radius:2px}.lab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-top:4px}
-.verdict{font-size:20px;font-weight:700;margin:10px 0 2px}.note{font-size:13.5px;color:var(--mut)}
-table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}td,th{border-bottom:1px solid var(--line);padding:6px 6px;text-align:left}th{color:var(--mut);font-weight:600}
-.status{font-size:13px;color:var(--mut);margin-top:6px}code{background:#f1f3f5;padding:1px 5px;border-radius:4px;font-size:13.5px}
-.warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;font-size:14px;margin-top:16px}
-footer{margin-top:28px;font-size:13px;color:var(--mut)}a{color:var(--acc)}
-</style></head><body><main>
-<h1>TinyDetect</h1>
-<p class="sub">AI-generated text and image detection that runs entirely in your browser. Nothing you paste or drop is uploaded anywhere.</p>
-<div id="pills"></div>
-<div class="tabs"><button class="tab on" data-t="text">Text</button><button class="tab" data-t="image">Image</button></div>
-<section id="p-text" class="card">
- <textarea id="txt" placeholder="Paste a paragraph or more (works best with 80+ words)…"></textarea>
- <button class="go" id="gotext" disabled>Loading model…</button><div class="status" id="st-text"></div>
- <div class="res" id="r-text"></div>
-</section>
-<section id="p-image" class="card" style="display:none">
- <div class="drop" id="drop">Drop an image here, or click to choose one<input type="file" id="file" accept="image/*" hidden></div>
- <img id="imgprev" alt=""><div class="status" id="st-image"></div><div class="res" id="r-image"></div>
-</section>
-<div class="warn"><b>Please don't use this to accuse anyone.</b> Every detector makes mistakes, and these are tiny models. Both were trained to <i>avoid</i> flagging human work (false alarms cost 3× a miss), but they still will sometimes. Treat the score as a hint, not evidence.</div>
-<h3 style="margin-top:26px">How small, and how good?</h3><div id="stats" class="note">Loading measured results…</div>
-<footer>Models: text student distilled from a 499&nbsp;MB RoBERTa detector; image student distilled from a Swin-B detector. <a href="https://github.com/ritabratamaiti/tinydetect">Code, method &amp; full results</a>. Runs on <a href="https://onnxruntime.ai/">ONNX Runtime Web</a> (WebAssembly).</footer>
-</main>
-<script src="ort/ort.wasm.min.js"></script>
-<script src="app.js"></script>
+:root{--bg:#f8f7f5;--ink:#14201e;--mut:#5b6663;--line:#e4e1dc;--card:#fff;--org:#ff6106;--orgs:#fee3da;--grn:#15502e;--red:#c2410c;--amb:#b45309}
+*{box-sizing:border-box}html,body{margin:0}body{font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:inherit}header{display:flex;justify-content:space-between;align-items:center;max-width:1080px;margin:0 auto;padding:20px 24px}
+.logo{font-weight:600;font-size:19px;letter-spacing:-.2px}.logo span{color:var(--org)}nav a{margin-left:22px;text-decoration:none;color:var(--ink);font-size:15px}nav a:hover{color:var(--org)}
+.hero{max-width:1080px;margin:0 auto;padding:36px 24px 8px;text-align:center}
+h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(40px,6vw,64px);line-height:1.05;margin:0 0 14px;letter-spacing:-.5px}
+.lede{color:var(--mut);font-size:18px;max-width:640px;margin:0 auto}
+.tool{max-width:860px;margin:30px auto 0;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(20,32,30,.04),0 8px 30px rgba(20,32,30,.06);overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--line)}.tab{flex:1;padding:14px;background:none;border:0;font:500 15px "IBM Plex Sans",sans-serif;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent}
+.tab.on{color:var(--ink);border-bottom-color:var(--org)}
+.pane{padding:18px}.ex{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;font-size:14px;color:var(--mut)}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 12px;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink);cursor:pointer}.chip:hover{border-color:var(--org)}
+textarea{width:100%;min-height:220px;border:0;background:#f3f3f3;border-radius:8px;padding:14px;font:15px/1.6 "IBM Plex Sans",sans-serif;color:var(--ink);resize:vertical;outline:none}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px}.meta{font-size:13px;color:var(--mut)}
+.go{background:var(--org);color:#fff;border:0;border-radius:6px;padding:11px 22px;font:500 15px "IBM Plex Sans",sans-serif;cursor:pointer}.go:disabled{opacity:.55;cursor:default}
+.drop{border:1.5px dashed #cfcac2;border-radius:10px;padding:40px 18px;text-align:center;color:var(--mut);cursor:pointer;background:#fbfaf8}.drop.hov{border-color:var(--org);background:#fff7f2}
+.drop b{color:var(--ink);font-weight:500}#imgprev{max-width:100%;max-height:320px;display:none;margin:14px auto 0;border-radius:8px}
+.res{display:none;margin-top:16px;border-top:1px solid var(--line);padding-top:16px}
+.verdict{display:flex;align-items:baseline;gap:12px}.vlabel{font-family:"Instrument Serif",Georgia,serif;font-size:32px;line-height:1}.vpct{font-size:15px;color:var(--mut)}
+.meter{height:8px;border-radius:4px;background:#ece9e4;margin:12px 0 6px;overflow:hidden}.fill{height:100%;border-radius:4px}
+.scale{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}.small{font-size:13px;color:var(--mut);margin-top:10px}
+section.b{max-width:860px;margin:64px auto 0;padding:0 24px}h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:40px;margin:0 0 6px;letter-spacing:-.3px}
+.sub{color:var(--mut);margin:0 0 18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}.stat .n{font-family:"Instrument Serif",Georgia,serif;font-size:38px;line-height:1}.stat .l{font-size:13.5px;color:var(--mut);margin-top:6px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px;margin-bottom:16px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}th{background:#f3f1ed;font-weight:500;color:var(--mut);font-size:13px}tr:last-child td{border-bottom:0}td.k{font-weight:600}
+.note{font-size:14px;color:var(--mut)}footer{max-width:860px;margin:56px auto 40px;padding:18px 24px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+</style></head><body>
+<header><div class="logo">Tiny<span>Detect</span></div><nav><a href="#benchmarks">Benchmarks</a><a href="https://github.com/ritabratamaiti/tinydetect">GitHub</a></nav></header>
+<div class="hero"><h1>AI detection, small enough<br>to run on your device.</h1>
+<p class="lede">Check text and images for signs of AI generation. The models load into your browser, so what you check stays on your computer.</p></div>
+<div class="tool">
+ <div class="tabs"><button class="tab on" data-t="text">Text</button><button class="tab" data-t="image">Image</button></div>
+ <div class="pane" id="p-text">
+  <div class="ex">Try an example: <button class="chip" data-ex="human">Human (Mark Twain, 1883)</button><button class="chip" data-ex="ai">AI-written</button></div>
+  <textarea id="txt" placeholder="Paste text here. Works best with 100+ words."></textarea>
+  <div class="row"><span class="meta" id="st-text">Loading model…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
+  <div class="res" id="r-text"></div>
+ </div>
+ <div class="pane" id="p-image" style="display:none">
+  <div class="drop" id="drop"><b>Drop an image here</b> or click to upload<br><span style="font-size:13px">JPG, PNG or WebP</span><input type="file" id="file" accept="image/*" hidden></div>
+  <img id="imgprev" alt=""><div class="meta" id="st-image" style="margin-top:10px"></div><div class="res" id="r-image"></div>
+ </div>
+</div>
+<section class="b" id="benchmarks"><h2>Benchmarks</h2><p class="sub">Measured on held-out data and on fresh samples the models never saw during training.</p><div id="bench"></div></section>
+<footer><span>TinyDetect · Ritabrata Maiti</span><span><a href="https://github.com/ritabratamaiti/tinydetect">Code &amp; method</a> · Models CC BY-NC 4.0</span></footer>
+<script src="ort/ort.wasm.min.js"></script><script src="app.js"></script>
 </body></html>

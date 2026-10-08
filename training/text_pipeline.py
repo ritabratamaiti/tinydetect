@@ -7,7 +7,11 @@ P=r'C:\Projects\TinyDetect'; dev='cuda'; random.seed(0); torch.manual_seed(0)
 def log(*a):
     s=time.strftime('%H:%M:%S')+' '+' '.join(map(str,a)); print(s,flush=True); open(P+r'\logs\text.log','a').write(s+'\n')
 rows=[json.loads(l) for l in open(P+r'\data\text_raw.jsonl',encoding='utf8')]
+if os.path.exists(P+r'\data\text_raid_extra.jsonl'): rows+=[json.loads(l) for l in open(P+r'\data\text_raid_extra.jsonl',encoding='utf8') if l.strip()]
 random.shuffle(rows); n=len(rows); te=rows[:int(.18*n)]; tr=rows[int(.18*n):]
+extra=[json.loads(l) for l in open(P+r'\data\text_human_extra.jsonl',encoding='utf8') if l.strip()] if os.path.exists(P+r'\data\text_human_extra.jsonl') else []
+random.shuffle(extra); ne=len(extra); te_extra=extra[:int(.15*ne)]; tr=tr+extra[int(.15*ne):]; random.shuffle(tr)
+log('extra human',ne,'(train',ne-len(te_extra),'/ heldout',len(te_extra),')')
 log('train',len(tr),'test',len(te),'human_tr',sum(r['y']==0 for r in tr))
 # ---- teacher soft labels
 tt=AutoTokenizer.from_pretrained('Oxidane/tmr-ai-text-detector'); tm=AutoModelForSequenceClassification.from_pretrained('Oxidane/tmr-ai-text-detector').to(dev).half().eval()
@@ -18,13 +22,15 @@ def teach(rs,bs=32):
         b=tt([r['t'] for r in rs[i:i+bs]],truncation=True,max_length=256,padding=True,return_tensors='pt').to(dev)
         out+=torch.softmax(tm(**b).logits.float(),-1)[:,1].tolist()
     return out
-t0=time.time(); ptr=teach(tr); pte=teach(te); log('teacher done',round(time.time()-t0),'s')
+t0=time.time(); ptr=teach(tr); pte=teach(te); pex=teach(te_extra) if te_extra else []; log('teacher done',round(time.time()-t0),'s')
 del tm; torch.cuda.empty_cache()
 def metrics(y,p,name):
     y=np.array(y);p=np.array(p);auc=roc_auc_score(y,p);fpr,tpr,th=roc_curve(y,p)
     t1=float(np.interp(0.01,fpr,tpr)); h=p[y==0]; fp5=float((h>0.5).mean())
     log(f'{name}: AUROC={auc:.4f} TPR@1%FPR={t1:.3f} FPR@0.5={fp5:.3f}'); return dict(auc=auc,tpr1=t1,fpr05=fp5)
 res={'teacher':metrics([r['y'] for r in te],pte,'TEACHER roberta-base 499MB')}
+if te_extra:
+    ph=pex; res['teacher_extra_human_fpr']=float(np.mean(np.array(ph)>0.5)); log('TEACHER on held-out formal human text: flagged',round(res['teacher_extra_human_fpr'],3))
 # ---- student
 st=AutoTokenizer.from_pretrained('google/bert_uncased_L-4_H-256_A-4')
 sm=BertForSequenceClassification.from_pretrained('google/bert_uncased_L-4_H-256_A-4',num_labels=2).to(dev)
@@ -41,7 +47,8 @@ for ep in range(EPOCHS):
         y=torch.tensor([tr[j]['y'] for j in bi],device=dev); pt=torch.tensor([ptr[j] for j in bi],device=dev)
         lg=sm(**b).logits; ls=torch.log_softmax(lg/T,-1); q=torch.stack([1-pt,pt],-1).clamp(1e-4,1)
         q=torch.softmax(torch.log(q)/T,-1)
-        kd=F.kl_div(ls,q,reduction='batchmean')*T*T
+        kdm=(y==1).float()  # distil only on AI samples: teacher over-flags formal human prose, so don't copy that
+        kd=(F.kl_div(ls,q,reduction='none').sum(-1)*kdm).sum()/max(1.0,kdm.sum().item())*T*T
         w=torch.where(y==0,torch.full_like(y,W_HUMAN,dtype=torch.float),torch.ones_like(y,dtype=torch.float))
         ce=(F.cross_entropy(lg,y,reduction='none')*w).mean()
         # FPR hinge: push human scores below 0.3 margin
@@ -60,11 +67,15 @@ def spred(model,rs,embed_override=None,bs=64):
         out+=torch.softmax(o.logits.float(),-1)[:,1].tolist()
     return out
 yte=[r['y'] for r in te]
-res['student_fp32']=metrics(yte,spred(sm,te),'STUDENT bert-mini fp32'); torch.save(sm.state_dict(),P+r'\models\text_student.pt')
+res['student_fp32']=metrics(yte,spred(sm,te),'STUDENT bert-mini fp32');
+if te_extra:
+    pe=spred(sm,te_extra); res['student_extra_human_fpr']=float(np.mean(np.array(pe)>0.5)); log('STUDENT on held-out formal human text: flagged',round(res['student_extra_human_fpr'],3))
+torch.save(sm.state_dict(),P+r'\models\text_student.pt')
 # ---- custom quant: vocab prune + int4 per-row embeddings (simulate)
 used=set(st.all_special_ids)
-for i in range(0,len(rows),256):
-    for ids in st([r['t'] for r in rows[i:i+256]],truncation=True,max_length=L)['input_ids']: used.update(ids)
+allr=rows+extra
+for i in range(0,len(allr),256):
+    for ids in st([r['t'] for r in allr[i:i+256]],truncation=True,max_length=L)['input_ids']: used.update(ids)
 keep=sorted(used); log('vocab kept',len(keep),'of',st.vocab_size)
 W=sm.bert.embeddings.word_embeddings.weight.detach().float().cpu()
 Wk=W[keep]; scale=Wk.abs().amax(1,keepdim=True)/7.0; q4=torch.clamp(torch.round(Wk/scale),-8,7).to(torch.int8)

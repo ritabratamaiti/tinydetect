@@ -1,7 +1,7 @@
 // TinyDetect: fully client-side. Custom bits: pruned WordPiece vocab + int4 (per-row scaled) embeddings decoded in JS.
 ort.env.wasm.wasmPaths=new URL('ort/',location.href).href; ort.env.wasm.numThreads=self.crossOriginIsolated?Math.min(4,navigator.hardwareConcurrency||1):1;
 const $=id=>document.getElementById(id);
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));$('p-text').style.display=b.dataset.t==='text'?'':'none';$('p-image').style.display=b.dataset.t==='image'?'':'none';if(b.dataset.t==='image')loadImage();});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));$('p-text').style.display=b.dataset.t==='text'?'':'none';$('p-image').style.display=b.dataset.t==='image'?'':'none';if(b.dataset.t==='image')loadImage().then(()=>$('st-image').textContent='');});
 function f16(h){const s=(h&0x8000)?-1:1,e=(h>>10)&31,m=h&1023;if(e===0)return s*Math.pow(2,-14)*(m/1024);if(e===31)return m?NaN:s*Infinity;return s*Math.pow(2,e-15)*(1+m/1024);}
 async function bin(u){const r=await fetch(u);if(!r.ok)throw new Error(u+' '+r.status);return new Uint8Array(await r.arrayBuffer());}
 // ---------- BERT uncased tokenizer (basic + wordpiece) over a pruned vocab
@@ -29,18 +29,21 @@ async function scoreText(text){
  return {p:probs.reduce((a,b)=>a+b,0)/probs.length,n:pieces.length,w:probs.length};}
 // ---------- image
 let IM=null,imgLoading=null;
-function loadImage(){if(!imgLoading)imgLoading=ort.InferenceSession.create('models/image_int8.onnx',{executionProviders:['wasm']}).then(s=>{IM=s;$('st-image').textContent='Model ready.';});return imgLoading;}
+function loadImage(){if(!imgLoading)imgLoading=ort.InferenceSession.create('models/image_int8.onnx',{executionProviders:['wasm']}).then(s=>{IM=s;});return imgLoading;}
 async function scoreImage(img){await loadImage();const c=document.createElement('canvas');c.width=c.height=224;const g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(img,0,0,224,224);
  const d=g.getImageData(0,0,224,224).data,N=224*224,x=new Float32Array(3*N);for(let i=0;i<N;i++){x[i]=d[4*i+2]/255;x[N+i]=d[4*i+1]/255;x[2*N+i]=d[4*i]/255;}
  const o=await IM.run({pixel_values:new ort.Tensor('float32',x,[1,3,224,224])});const l=o.logits.data;const m=Math.max(l[0],l[1]);const a=Math.exp(l[0]-m),b=Math.exp(l[1]-m);return b/(a+b);}
 // ---------- UI
-function show(el,p,extra){const pct=Math.round(p*100);const v=p>=0.8?['Likely AI-generated','var(--ai)']:p>=0.5?['Leaning AI-generated','#b45309']:p>=0.25?['Uncertain','var(--mut)']:['Likely human-made','var(--hu)'];
- el.style.display='block';el.innerHTML='<div class="bar"><div class="mark" style="left:calc('+pct+'% - 2px)"></div></div><div class="lab"><span>human</span><span>AI</span></div><div class="verdict" style="color:'+v[1]+'">'+v[0]+' · '+pct+'%</div><div class="note">'+extra+'</div>';}
+const EX={human:"That was a dismal revelation to me; for my memory was never loaded with anything but blank cartridges. However, I did not feel discouraged long. I judged that it was best to make some allowances, for doubtless Mr. Bixby was 'stretching.' Presently he pulled a rope and struck a few strokes on the big bell. The stars were all gone now, and the night was as black as ink. I could hear the wheels churn along the bank, but I was not entirely certain that I could see the shore.",
+ai:"Remote work has fundamentally changed how teams collaborate. While many organizations initially viewed it as a temporary measure, it has evolved into a long-term strategy for attracting and retaining talent. Employees value the flexibility to structure their day around both professional and personal commitments, and studies consistently show that productivity can remain high when clear expectations are established. However, remote work also presents challenges, including feelings of isolation and difficulties in maintaining company culture."};
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{$('txt').value=EX[c.dataset.ex];$('gotext').click();});
+function show(el,p,meta){const pct=Math.round(p*100);const v=p>=0.9?['AI-generated','var(--red)']:p>=0.6?['Possibly AI','var(--amb)']:p>=0.3?['Unclear','var(--mut)']:['Human','var(--grn)'];
+ el.style.display='block';el.innerHTML='<div class="verdict"><span class="vlabel" style="color:'+v[1]+'">'+v[0]+'</span><span class="vpct">'+pct+'% AI likelihood</span></div><div class="meter"><div class="fill" style="width:'+Math.max(3,pct)+'%;background:'+v[1]+'"></div></div><div class="scale"><span>Human</span><span>AI</span></div><div class="small">'+meta+'</div>';}
 $('gotext').onclick=async()=>{const t=$('txt').value.trim();if(!t)return;$('gotext').disabled=true;const t0=performance.now();
- try{const r=await scoreText(t);show($('r-text'),r.p,r.n+' tokens, '+r.w+' window(s), '+Math.round(performance.now()-t0)+' ms on your device. Short or heavily edited text is much less reliable.');}catch(e){$('st-text').textContent=e.message;}$('gotext').disabled=false;};
+ try{const r=await scoreText(t);show($('r-text'),r.p,'Checked '+r.n+' tokens in '+Math.round(performance.now()-t0)+' ms. Short or heavily edited text is harder to judge.');}catch(e){$('st-text').textContent=e.message;}$('gotext').disabled=false;};
 const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();['dragover','dragenter'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('hov');}));['dragleave','drop'].forEach(e=>drop.addEventListener(e,()=>drop.classList.remove('hov')));
 drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files[0])handle(ev.dataTransfer.files[0]);});file.onchange=()=>file.files[0]&&handle(file.files[0]);
-function handle(f){const u=URL.createObjectURL(f);const img=$('imgprev');img.onload=async()=>{$('st-image').textContent='Analysing…';const t0=performance.now();try{const p=await scoreImage(img);$('st-image').textContent='';show($('r-image'),p,'Ran in '+Math.round(performance.now()-t0)+' ms on your device. Screenshots, heavy edits and new image generators can fool it.');}catch(e){$('st-image').textContent=e.message;}};img.src=u;}
+function handle(f){const u=URL.createObjectURL(f);const img=$('imgprev');img.style.display='block';img.onload=async()=>{$('st-image').textContent='Checking…';const t0=performance.now();try{const p=await scoreImage(img);$('st-image').textContent='';show($('r-image'),p,'Checked in '+Math.round(performance.now()-t0)+' ms. Screenshots, crops and heavy edits are harder to judge.');}catch(e){$('st-image').textContent=e.message;}};img.src=u;}
 // ---------- boot
-(async()=>{try{const t0=performance.now();await loadText();$('gotext').disabled=false;$('gotext').textContent='Check text';$('st-text').textContent='Text model loaded in '+Math.round(performance.now()-t0)+' ms.';}catch(e){$('gotext').textContent='Model failed to load';$('st-text').textContent=e.message;}
- try{const R=await fetch('results.json').then(r=>r.json());$('pills').innerHTML=R.pills.map(p=>'<span class="pill">'+p+'</span>').join('');$('stats').innerHTML=R.html;}catch(e){$('stats').textContent='';}})();
+(async()=>{try{const t0=performance.now();await loadText();$('gotext').disabled=false;$('st-text').textContent='Ready';}catch(e){$('st-text').textContent='Model failed to load: '+e.message;}
+ try{const R=await fetch('results.json').then(r=>r.json());$('bench').innerHTML=R.html;}catch(e){}})();
