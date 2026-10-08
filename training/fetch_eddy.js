@@ -1,0 +1,7 @@
+const fs=require('fs');const P="C:\\Projects\\TinyDetect";const log=m=>fs.appendFileSync(P+'/logs/data.log',new Date().toISOString().slice(11,19)+' '+m+'\n');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function rows(sp,off){for(let t=0;t<6;t++){try{const r=await fetch('https://datasets-server.huggingface.co/rows?dataset=eddyfox8812/ai-vs-real-2k-images&config=default&split='+sp+'&offset='+off+'&length=100');if(r.ok)return (await r.json()).rows;log('eddy rows '+r.status);await sleep(3000*(t+1));}catch(e){await sleep(3000);}}return [];}
+async function pool(items,n,fn){let i=0;await Promise.all(Array.from({length:n},async()=>{while(i<items.length){const k=i++;try{await fn(items[k]);}catch(e){}}}));}
+(async()=>{let n=0;const jobs=[];for(const sp of ['train','test'])for(let o=0;o<1000;o+=100)jobs.push([sp,o]);
+ await pool(jobs,2,async([sp,o])=>{const r=await rows(sp,o);await pool(r,6,async x=>{for(let t=0;t<3;t++){const res=await fetch(x.row.image.src);if(res.status===429){await sleep(2000);continue;}if(!res.ok)return;const b=Buffer.from(await res.arrayBuffer());const f=sp+'_'+x.row_idx+'.jpg';fs.writeFileSync(P+'/data/img/eddy/'+f,b);fs.appendFileSync(P+'/data/img_meta.jsonl',JSON.stringify({f:'eddy/'+f,y:x.row.label===0?1:0,src:'eddyfox',split:sp})+'\n');n++;return;}});log('eddy2 '+n);});
+ log('EDDY2DONE '+n);})();

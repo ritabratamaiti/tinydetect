@@ -1,0 +1,7 @@
+The model weights in this folder are copyright 2026 Ritabrata Maiti and are licensed under
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0):
+https://creativecommons.org/licenses/by-nc/4.0/
+
+They were distilled from Smogy/SMOGY-Ai-images-detector (CC BY-NC 4.0) and
+Oxidane/tmr-ai-text-detector (MIT), and initialised from google/bert_uncased_L-4_H-256_A-4
+(Apache-2.0) and apple/mobilevit-xx-small (Apple Sample Code License; notice retained).
