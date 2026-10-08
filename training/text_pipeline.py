@@ -8,6 +8,28 @@ def log(*a):
     s=time.strftime('%H:%M:%S')+' '+' '.join(map(str,a)); print(s,flush=True); open(P+r'\logs\text.log','a').write(s+'\n')
 rows=[json.loads(l) for l in open(P+r'\data\text_raw.jsonl',encoding='utf8')]
 if os.path.exists(P+r'\data\text_raid_extra.jsonl'): rows+=[json.loads(l) for l in open(P+r'\data\text_raid_extra.jsonl',encoding='utf8') if l.strip()]
+if os.path.exists(P+r'\data\text_v4_extra.jsonl'): rows+=[json.loads(l) for l in open(P+r'\data\text_v4_extra.jsonl',encoding='utf8') if l.strip()]
+if 'text_mgt' in os.environ.get('XTRA','') and os.path.exists(P+r'\data\text_mgt.jsonl'):
+    mg=[json.loads(l) for l in open(P+r'\data\text_mgt.jsonl',encoding='utf8') if l.strip()]
+    hc={}
+    for r in mg:
+        if r['y']==0: hc[r['d']]=hc.get(r['d'],0)+1
+    ac={}
+    for r in mg:
+        if r['y']==1:
+            ac[r['d']]=ac.get(r['d'],0)+1
+            if ac[r['d']]>max(2*hc.get(r['d'],0),10): continue  # keep AI at most 2x human per source
+        rows.append(r)
+# optional experiments (not in the shipped model): XTRA=text_mgt,text_wild,text_hape,text_gen_gemma-3-1b-it
+for _f in os.environ.get('XTRA','').split(','):
+    if _f and _f!='text_mgt' and os.path.exists(P+'\\data\\'+_f+'.jsonl'): rows+=[json.loads(l) for l in open(P+'\\data\\'+_f+'.jsonl',encoding='utf8') if l.strip()]
+# de-confound: cap AI samples per domain so no genre is almost entirely AI
+random.seed(0); random.shuffle(rows); capd={}; kept=[]
+for r in rows:
+    k=(r['d'],r['y'])
+    if r['y']==1 and capd.get(k,0)>=700: continue
+    capd[k]=capd.get(k,0)+1; kept.append(r)
+rows=kept
 random.shuffle(rows); n=len(rows); te=rows[:int(.18*n)]; tr=rows[int(.18*n):]
 extra=[json.loads(l) for l in open(P+r'\data\text_human_extra.jsonl',encoding='utf8') if l.strip()] if os.path.exists(P+r'\data\text_human_extra.jsonl') else []
 random.shuffle(extra); ne=len(extra); te_extra=extra[:int(.15*ne)]; tr=tr+extra[int(.15*ne):]; random.shuffle(tr)

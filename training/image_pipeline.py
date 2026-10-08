@@ -8,7 +8,7 @@ from sklearn.metrics import roc_auc_score, roc_curve
 P=r'C:\Projects\TinyDetect'; dev='cuda'; random.seed(0); torch.manual_seed(0); np.random.seed(0)
 def log(*a):
     s=time.strftime('%H:%M:%S')+' '+' '.join(map(str,a)); print(s,flush=True); open(P+r'\logs\image.log','a').write(s+'\n')
-meta=[json.loads(l) for l in open(P+r'\data\img_meta.jsonl') if l.strip()]+[json.loads(l) for l in open(P+r'\data\img_meta_hemg.jsonl') if l.strip()]
+meta=[json.loads(l) for l in open(P+r'\data\img_meta.jsonl') if l.strip()]+[json.loads(l) for l in open(P+r'\data\img_meta_hemg.jsonl') if l.strip()]+([json.loads(l) for l in open(P+r'\data\img_meta_v4.jsonl') if l.strip()] if os.path.exists(P+r'\data\img_meta_v4.jsonl') else [])
 def load(f):
     try: return Image.open(os.path.join(P,'data','img',*f.split('/'))).convert('RGB')
     except Exception: return None
@@ -19,8 +19,9 @@ for m in meta:
     if im is not None: items.append((im.resize((224,224),Image.BICUBIC),m['y'],m['src'],m.get('split','')))
 eddy_tr=[x for x in items if x[2]=='eddyfox' and x[3]=='train']; eddy_te=[x for x in items if x[2]=='eddyfox' and x[3]=='test']
 hem=[x for x in items if x[2]=='hemg']; random.shuffle(hem); nh=int(.2*len(hem))
+v4=[x for x in items if x[2] not in ('hemg','eddyfox')]
 te_in=eddy_te; edd=hem[:nh]   # 'in' = held-out eddyfox photos; 'ood' = different-source low-res thumbnails
-tr=[x[:3] for x in eddy_tr+hem[nh:]]; te_in=[x[:3] for x in te_in]; edd=[x[:3] for x in edd]
+tr=[x[:3] for x in eddy_tr+hem[nh:]+v4]; te_in=[x[:3] for x in te_in]; edd=[x[:3] for x in edd]
 log('train',len(tr),'test_in',len(te_in),'test_ood(thumbnails)',len(edd),'ai_frac_tr',round(np.mean([y for _,y,_ in tr]),3))
 # ---- teachers
 T1='Smogy/SMOGY-Ai-images-detector'; T2='jacoballessio/ai-image-detect-distilled'
@@ -89,20 +90,6 @@ def sp(model,ims,bs=64):
     return o
 res['student_fp32_in']=metrics([y for _,y,_ in te_in],sp(sm,te_in),'STUDENT mobilevit-xxs fp32 in-dist')
 res['student_fp32_ood']=metrics([y for _,y,_ in edd],sp(sm,edd),'STUDENT mobilevit-xxs fp32 OOD')
-# ---- export + static int8 (per-channel QDQ, calibrated on real training images)
-smc=sm.float().cpu().eval(); os.makedirs(P+r'\web\models',exist_ok=True)
-torch.onnx.export(smc,torch.randn(1,3,224,224),P+r'\models\image_fp32.onnx',input_names=['pixel_values'],output_names=['logits'],opset_version=17,dynamo=False)
-from onnxruntime.quantization import quantize_static, CalibrationDataReader, QuantFormat, QuantType
-from onnxruntime.quantization.shape_inference import quant_pre_process
-quant_pre_process(P+r'\models\image_fp32.onnx',P+r'\models\image_pre.onnx')
-class R(CalibrationDataReader):
-    def __init__(s): s.it=iter([{'pixel_values':totensor(tr[j][0])[None].numpy()} for j in random.sample(range(ntr),200)])
-    def get_next(s): return next(s.it,None)
-quantize_static(P+r'\models\image_pre.onnx',P+r'\web\models\image_int8.onnx',R(),quant_format=QuantFormat.QDQ,per_channel=True,weight_type=QuantType.QInt8,activation_type=QuantType.QUInt8)
-import onnxruntime as ort
-s=ort.InferenceSession(P+r'\web\models\image_int8.onnx')
-def qp(ims): return [float(torch.softmax(torch.tensor(s.run(None,{'pixel_values':totensor(x[0])[None].numpy()})[0]),-1)[0,1]) for x in ims]
-res['final_int8_in']=metrics([y for _,y,_ in te_in],qp(te_in),'FINAL shipped int8 in-dist')
-res['final_int8_ood']=metrics([y for _,y,_ in edd],qp(edd),'FINAL shipped int8 OOD')
-res['size_MB']={'teacher_swin':347,'teacher_vit':58,'student_int8':round(os.path.getsize(P+r'\web\models\image_int8.onnx')/1e6,2)}
-log('image int8 MB',res['size_MB']['student_int8']); json.dump(res,open(P+r'\logs\image_results.json','w'),indent=1); log('IMAGEDONE')
+# ---- export fp32 (weight-only int8 is applied by quant_image.py / wq_image.py)
+smc=sm.float().cpu().eval(); torch.onnx.export(smc,torch.randn(1,3,224,224),P+r'\models\image_fp32.onnx',input_names=['pixel_values'],output_names=['logits'],opset_version=17,dynamo=False)
+log('IMGTRAINDONE')

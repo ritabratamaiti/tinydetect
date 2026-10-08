@@ -1,7 +1,8 @@
 import json, os, glob, numpy as np, onnxruntime as ort
 from PIL import Image
 from transformers import AutoTokenizer
-P=r'C:\Projects\TinyDetect'; W=P+r'\web\models'
+P=r'C:\Projects\TinyDetect'; W=os.environ.get('MDIR',P+r'\web\models')
+FR=os.environ.get('FRESH','fresh')
 voc=json.load(open(W+r'\text_vocab.json')); keep=voc['keep_ids']; remap={k:i for i,k in enumerate(keep)}; dim=voc['dim']
 emb=np.fromfile(W+r'\text_emb_int4.bin',dtype=np.uint8).reshape(len(keep),dim//2); sc=np.fromfile(W+r'\text_emb_scale_f16.bin',dtype=np.float16).astype(np.float32)
 lo=(emb&15).astype(np.float32)-8; hi=(emb>>4).astype(np.float32)-8; E=np.empty((len(keep),dim),np.float32); E[:,0::2]=lo; E[:,1::2]=hi; E*=sc[:,None]
@@ -20,10 +21,10 @@ def pimg(f):
     l=isess.run(None,{'pixel_values':np.ascontiguousarray(a.transpose(2,0,1))[None]})[0][0]; e=np.exp(l-l.max()); return float(e[1]/e.sum())
 def band(p): return 'AI' if p>=0.9 else 'possibly AI' if p>=0.6 else 'unclear' if p>=0.3 else 'human'
 out={'text':[],'image':[]}
-for f,y in [(P+r'\fresh\human_text.json',0),(P+r'\fresh\ai_text.json',1)]:
+for f,y in [(P+'\\'+FR+r'\human_text.json',0),(P+'\\'+FR+r'\ai_text.json',1)]:
     for r in json.load(open(f,encoding='utf8')):
         p=ptext(r['t']); out['text'].append({'src':r['src'],'y':y,'p':p})
-for f in (sorted(glob.glob(P+r'\fresh\img\*.jpg')) if os.environ.get('IMG','1')=='1' else []):
+for f in (sorted(glob.glob(P+'\\'+FR+r'\img\*.jpg')) if os.environ.get('IMG','1')=='1' else []):
     y=0 if os.path.basename(f).startswith('real') else 1
     try: out['image'].append({'src':os.path.basename(f),'y':y,'p':pimg(f)})
     except Exception as e: print('bad',f,e)
@@ -37,4 +38,4 @@ for k in ['text','image']:
     for b in ['AI','possibly AI','unclear','human']:
         out[k+'_summary']['human_'+b]=sum(r['y']==0 and band(r['p'])==b for r in rs); out[k+'_summary']['ai_'+b]=sum(r['y']==1 and band(r['p'])==b for r in rs)
     print(k,out[k+'_summary'])
-json.dump(out,open(P+r'\fresh\results.json','w'),indent=1)
+json.dump(out,open(P+'\\'+FR+r'\results.json','w'),indent=1)
