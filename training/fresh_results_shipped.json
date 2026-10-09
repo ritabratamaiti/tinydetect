@@ -1,0 +1,1359 @@
+{
+ "note": "Scores from the shipped models running in Chrome with WebGPU. y=1 means AI-written/AI-generated.",
+ "text": [
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.001,
+   "source": "hn_2012",
+   "tokens": 337
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0036,
+   "source": "hn_2012",
+   "tokens": 136
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0016,
+   "source": "hn_2012",
+   "tokens": 237
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0016,
+   "source": "hn_2012",
+   "tokens": 252
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0007,
+   "source": "hn_2012",
+   "tokens": 233
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0047,
+   "source": "hn_2012",
+   "tokens": 196
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0008,
+   "source": "hn_2012",
+   "tokens": 262
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.5006,
+   "source": "hn_2012",
+   "tokens": 137
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0017,
+   "source": "hn_2012",
+   "tokens": 158
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0129,
+   "source": "hn_2012",
+   "tokens": 157
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0345,
+   "source": "gutenberg_1342",
+   "tokens": 149
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0093,
+   "source": "gutenberg_98",
+   "tokens": 141
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0006,
+   "source": "gutenberg_2701",
+   "tokens": 362
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.1996,
+   "source": "gutenberg_84",
+   "tokens": 107
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0115,
+   "source": "gutenberg_1661",
+   "tokens": 158
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0513,
+   "source": "gutenberg_174",
+   "tokens": 385
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0009,
+   "source": "gutenberg_345",
+   "tokens": 288
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0035,
+   "source": "gutenberg_76",
+   "tokens": 227
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.3135,
+   "source": "wikipedia2019_Bicycle",
+   "tokens": 104
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.6643,
+   "source": "wikipedia2019_Bread",
+   "tokens": 159
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.108,
+   "source": "wikipedia2019_Monsoon",
+   "tokens": 98
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.7863,
+   "source": "wikipedia2019_Tea",
+   "tokens": 126
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0879,
+   "source": "wikipedia2019_Jazz",
+   "tokens": 183
+  },
+  {
+   "set": "fresh",
+   "y": 0,
+   "p": 0.0011,
+   "source": "wikipedia2019_Lighthouse",
+   "tokens": 134
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_blog",
+   "tokens": 137
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_student_essay",
+   "tokens": 139
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_product_review",
+   "tokens": 146
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9998,
+   "source": "claude_written_story",
+   "tokens": 143
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9997,
+   "source": "claude_written_email",
+   "tokens": 132
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_news",
+   "tokens": 133
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9902,
+   "source": "claude_written_technical",
+   "tokens": 143
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9997,
+   "source": "claude_written_linkedin",
+   "tokens": 135
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.6388,
+   "source": "claude_written_casual_reddit",
+   "tokens": 133
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_travel",
+   "tokens": 141
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_opinion",
+   "tokens": 129
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9997,
+   "source": "claude_written_howto",
+   "tokens": 140
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9998,
+   "source": "claude_written_cover_letter",
+   "tokens": 143
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_history",
+   "tokens": 131
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.2178,
+   "source": "claude_written_paraphrased_casual",
+   "tokens": 114
+  },
+  {
+   "set": "fresh",
+   "y": 1,
+   "p": 0.9999,
+   "source": "claude_written_poetic_prose",
+   "tokens": 128
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0008,
+   "source": "hn_2014",
+   "tokens": 199
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.4323,
+   "source": "hn_2014",
+   "tokens": 119
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0024,
+   "source": "hn_2014",
+   "tokens": 155
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0573,
+   "source": "hn_2014",
+   "tokens": 131
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0626,
+   "source": "hn_2014",
+   "tokens": 133
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0004,
+   "source": "hn_2014",
+   "tokens": 221
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0166,
+   "source": "hn_2014",
+   "tokens": 109
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0108,
+   "source": "hn_2014",
+   "tokens": 150
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.4922,
+   "source": "hn_2014",
+   "tokens": 102
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0309,
+   "source": "hn_2014",
+   "tokens": 272
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.001,
+   "source": "gutenberg2_84",
+   "tokens": 197
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0011,
+   "source": "gutenberg2_98",
+   "tokens": 164
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0605,
+   "source": "gutenberg2_1661",
+   "tokens": 119
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0143,
+   "source": "gutenberg2_76",
+   "tokens": 162
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0018,
+   "source": "gutenberg2_1260",
+   "tokens": 153
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0035,
+   "source": "gutenberg2_1400",
+   "tokens": 135
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0017,
+   "source": "gutenberg2_158",
+   "tokens": 203
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0414,
+   "source": "gutenberg2_219",
+   "tokens": 240
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.8593,
+   "source": "wikipedia2019b_Volcano",
+   "tokens": 135
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.2954,
+   "source": "wikipedia2019b_Chess",
+   "tokens": 172
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.2421,
+   "source": "wikipedia2019b_Coffee",
+   "tokens": 126
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0011,
+   "source": "wikipedia2019b_Bridge",
+   "tokens": 103
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0091,
+   "source": "wikipedia2019b_Penguin",
+   "tokens": 172
+  },
+  {
+   "set": "fresh2",
+   "y": 0,
+   "p": 0.0042,
+   "source": "wikipedia2019b_Opera",
+   "tokens": 256
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.2999,
+   "source": "claude2_casual_forum",
+   "tokens": 109
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.1238,
+   "source": "claude2_email_short",
+   "tokens": 106
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.4475,
+   "source": "claude2_slack_message",
+   "tokens": 96
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.5187,
+   "source": "claude2_product_qna",
+   "tokens": 105
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.7064,
+   "source": "claude2_recipe_intro",
+   "tokens": 113
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.8777,
+   "source": "claude2_reflection",
+   "tokens": 103
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.9433,
+   "source": "claude2_movie_review",
+   "tokens": 105
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.9996,
+   "source": "claude2_support_reply",
+   "tokens": 110
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.9922,
+   "source": "claude2_science_explainer",
+   "tokens": 102
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.9926,
+   "source": "claude2_sports_recap",
+   "tokens": 106
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.6194,
+   "source": "claude2_personal_blog",
+   "tokens": 99
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.7754,
+   "source": "claude2_faq_answer",
+   "tokens": 92
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.0126,
+   "source": "claude2_reddit_advice",
+   "tokens": 100
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.9923,
+   "source": "claude2_news_brief",
+   "tokens": 91
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.7508,
+   "source": "claude2_history_casual",
+   "tokens": 104
+  },
+  {
+   "set": "fresh2",
+   "y": 1,
+   "p": 0.6276,
+   "source": "claude2_text_message",
+   "tokens": 78
+  }
+ ],
+ "image": [
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_0.jpg",
+   "y": 1,
+   "p": 0.9585
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_1.jpg",
+   "y": 1,
+   "p": 0.9983
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_2.jpg",
+   "y": 1,
+   "p": 0.9993
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_3.jpg",
+   "y": 1,
+   "p": 0.9972
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_4.jpg",
+   "y": 1,
+   "p": 0.9991
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_5.jpg",
+   "y": 1,
+   "p": 0.9987
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_6.jpg",
+   "y": 1,
+   "p": 0.9982
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_7.jpg",
+   "y": 1,
+   "p": 0.9862
+  },
+  {
+   "set": "fresh",
+   "file": "ai_dalle3_8.jpg",
+   "y": 1,
+   "p": 0.9934
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_0.jpg",
+   "y": 1,
+   "p": 0.8076
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_1.jpg",
+   "y": 1,
+   "p": 0.9682
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_10.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_11.jpg",
+   "y": 1,
+   "p": 0.9995
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_12.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_13.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_14.jpg",
+   "y": 1,
+   "p": 0.9997
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_15.jpg",
+   "y": 1,
+   "p": 0.9998
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_16.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_17.jpg",
+   "y": 1,
+   "p": 0.8989
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_18.jpg",
+   "y": 1,
+   "p": 0.9805
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_19.jpg",
+   "y": 1,
+   "p": 0.9986
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_2.jpg",
+   "y": 1,
+   "p": 0.9995
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_20.jpg",
+   "y": 1,
+   "p": 0.9996
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_21.jpg",
+   "y": 1,
+   "p": 0.9278
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_22.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_23.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_24.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_25.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_26.jpg",
+   "y": 1,
+   "p": 0.9983
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_27.jpg",
+   "y": 1,
+   "p": 0.9994
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_28.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_29.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_3.jpg",
+   "y": 1,
+   "p": 0.9964
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_30.jpg",
+   "y": 1,
+   "p": 0.9997
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_31.jpg",
+   "y": 1,
+   "p": 0.9994
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_4.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_5.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_6.jpg",
+   "y": 1,
+   "p": 0.9998
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_7.jpg",
+   "y": 1,
+   "p": 0.9997
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_8.jpg",
+   "y": 1,
+   "p": 0.9998
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mj_9.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_0.jpg",
+   "y": 1,
+   "p": 0.6664
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_1.jpg",
+   "y": 1,
+   "p": 0.8874
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_2.jpg",
+   "y": 1,
+   "p": 0.7946
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_3.jpg",
+   "y": 1,
+   "p": 0.2747
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_4.jpg",
+   "y": 1,
+   "p": 0.8982
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_5.jpg",
+   "y": 1,
+   "p": 0.9685
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_6.jpg",
+   "y": 1,
+   "p": 0.999
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_7.jpg",
+   "y": 1,
+   "p": 0.9566
+  },
+  {
+   "set": "fresh",
+   "file": "ai_mjv6_8.jpg",
+   "y": 1,
+   "p": 0.9389
+  },
+  {
+   "set": "fresh",
+   "file": "real_0.jpg",
+   "y": 0,
+   "p": 0.1908
+  },
+  {
+   "set": "fresh",
+   "file": "real_1.jpg",
+   "y": 0,
+   "p": 0.1058
+  },
+  {
+   "set": "fresh",
+   "file": "real_10.jpg",
+   "y": 0,
+   "p": 0.1064
+  },
+  {
+   "set": "fresh",
+   "file": "real_11.jpg",
+   "y": 0,
+   "p": 0.1002
+  },
+  {
+   "set": "fresh",
+   "file": "real_12.jpg",
+   "y": 0,
+   "p": 0.0489
+  },
+  {
+   "set": "fresh",
+   "file": "real_13.jpg",
+   "y": 0,
+   "p": 0.0638
+  },
+  {
+   "set": "fresh",
+   "file": "real_14.jpg",
+   "y": 0,
+   "p": 0.0647
+  },
+  {
+   "set": "fresh",
+   "file": "real_15.jpg",
+   "y": 0,
+   "p": 0.1001
+  },
+  {
+   "set": "fresh",
+   "file": "real_16.jpg",
+   "y": 0,
+   "p": 0.0667
+  },
+  {
+   "set": "fresh",
+   "file": "real_17.jpg",
+   "y": 0,
+   "p": 0.0266
+  },
+  {
+   "set": "fresh",
+   "file": "real_18.jpg",
+   "y": 0,
+   "p": 0.0513
+  },
+  {
+   "set": "fresh",
+   "file": "real_19.jpg",
+   "y": 0,
+   "p": 0.0445
+  },
+  {
+   "set": "fresh",
+   "file": "real_2.jpg",
+   "y": 0,
+   "p": 0.154
+  },
+  {
+   "set": "fresh",
+   "file": "real_20.jpg",
+   "y": 0,
+   "p": 0.0371
+  },
+  {
+   "set": "fresh",
+   "file": "real_21.jpg",
+   "y": 0,
+   "p": 0.0873
+  },
+  {
+   "set": "fresh",
+   "file": "real_22.jpg",
+   "y": 0,
+   "p": 0.8539
+  },
+  {
+   "set": "fresh",
+   "file": "real_23.jpg",
+   "y": 0,
+   "p": 0.0577
+  },
+  {
+   "set": "fresh",
+   "file": "real_24.jpg",
+   "y": 0,
+   "p": 0.2184
+  },
+  {
+   "set": "fresh",
+   "file": "real_25.jpg",
+   "y": 0,
+   "p": 0.0836
+  },
+  {
+   "set": "fresh",
+   "file": "real_26.jpg",
+   "y": 0,
+   "p": 0.0534
+  },
+  {
+   "set": "fresh",
+   "file": "real_27.jpg",
+   "y": 0,
+   "p": 0.1429
+  },
+  {
+   "set": "fresh",
+   "file": "real_28.jpg",
+   "y": 0,
+   "p": 0.0863
+  },
+  {
+   "set": "fresh",
+   "file": "real_29.jpg",
+   "y": 0,
+   "p": 0.092
+  },
+  {
+   "set": "fresh",
+   "file": "real_3.jpg",
+   "y": 0,
+   "p": 0.257
+  },
+  {
+   "set": "fresh",
+   "file": "real_4.jpg",
+   "y": 0,
+   "p": 0.1299
+  },
+  {
+   "set": "fresh",
+   "file": "real_5.jpg",
+   "y": 0,
+   "p": 0.078
+  },
+  {
+   "set": "fresh",
+   "file": "real_6.jpg",
+   "y": 0,
+   "p": 0.0943
+  },
+  {
+   "set": "fresh",
+   "file": "real_7.jpg",
+   "y": 0,
+   "p": 0.0792
+  },
+  {
+   "set": "fresh",
+   "file": "real_8.jpg",
+   "y": 0,
+   "p": 0.0765
+  },
+  {
+   "set": "fresh",
+   "file": "real_9.jpg",
+   "y": 0,
+   "p": 0.3265
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_19.jpg",
+   "y": 1,
+   "p": 0.3913
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_20.jpg",
+   "y": 1,
+   "p": 0.1543
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_21.jpg",
+   "y": 1,
+   "p": 0.9965
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_22.jpg",
+   "y": 1,
+   "p": 0.9944
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_23.jpg",
+   "y": 1,
+   "p": 0.9993
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_24.jpg",
+   "y": 1,
+   "p": 0.8573
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_25.jpg",
+   "y": 1,
+   "p": 0.9998
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_26.jpg",
+   "y": 1,
+   "p": 0.1639
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_27.jpg",
+   "y": 1,
+   "p": 0.8754
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_28.jpg",
+   "y": 1,
+   "p": 0.4233
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_29.jpg",
+   "y": 1,
+   "p": 0.9985
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_dalle3b_30.jpg",
+   "y": 1,
+   "p": 0.1162
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_fluxportrait_15.jpg",
+   "y": 1,
+   "p": 0.9937
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_fluxportrait_16.jpg",
+   "y": 1,
+   "p": 0.9906
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_fluxportrait_17.jpg",
+   "y": 1,
+   "p": 0.8484
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_fluxportrait_18.jpg",
+   "y": 1,
+   "p": 0.7508
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_0.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_1.jpg",
+   "y": 1,
+   "p": 0.9979
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_10.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_11.jpg",
+   "y": 1,
+   "p": 1
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_12.jpg",
+   "y": 1,
+   "p": 0.9995
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_13.jpg",
+   "y": 1,
+   "p": 0.9987
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_14.jpg",
+   "y": 1,
+   "p": 0.9571
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_2.jpg",
+   "y": 1,
+   "p": 0.9921
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_3.jpg",
+   "y": 1,
+   "p": 0.9999
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_4.jpg",
+   "y": 1,
+   "p": 0.9991
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_5.jpg",
+   "y": 1,
+   "p": 0.8733
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_6.jpg",
+   "y": 1,
+   "p": 0.9821
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_7.jpg",
+   "y": 1,
+   "p": 0.8889
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_8.jpg",
+   "y": 1,
+   "p": 0.9958
+  },
+  {
+   "set": "fresh2",
+   "file": "ai_mj_9.jpg",
+   "y": 1,
+   "p": 0.9746
+  },
+  {
+   "set": "fresh2",
+   "file": "real_0.jpg",
+   "y": 0,
+   "p": 0.0158
+  },
+  {
+   "set": "fresh2",
+   "file": "real_1.jpg",
+   "y": 0,
+   "p": 0.0301
+  },
+  {
+   "set": "fresh2",
+   "file": "real_10.jpg",
+   "y": 0,
+   "p": 0.331
+  },
+  {
+   "set": "fresh2",
+   "file": "real_11.jpg",
+   "y": 0,
+   "p": 0.0082
+  },
+  {
+   "set": "fresh2",
+   "file": "real_12.jpg",
+   "y": 0,
+   "p": 0.0321
+  },
+  {
+   "set": "fresh2",
+   "file": "real_13.jpg",
+   "y": 0,
+   "p": 0.2697
+  },
+  {
+   "set": "fresh2",
+   "file": "real_14.jpg",
+   "y": 0,
+   "p": 0.0241
+  },
+  {
+   "set": "fresh2",
+   "file": "real_15.jpg",
+   "y": 0,
+   "p": 0.0908
+  },
+  {
+   "set": "fresh2",
+   "file": "real_16.jpg",
+   "y": 0,
+   "p": 0.099
+  },
+  {
+   "set": "fresh2",
+   "file": "real_17.jpg",
+   "y": 0,
+   "p": 0.1518
+  },
+  {
+   "set": "fresh2",
+   "file": "real_18.jpg",
+   "y": 0,
+   "p": 0.5566
+  },
+  {
+   "set": "fresh2",
+   "file": "real_19.jpg",
+   "y": 0,
+   "p": 0.1262
+  },
+  {
+   "set": "fresh2",
+   "file": "real_2.jpg",
+   "y": 0,
+   "p": 0.032
+  },
+  {
+   "set": "fresh2",
+   "file": "real_20.jpg",
+   "y": 0,
+   "p": 0.8069
+  },
+  {
+   "set": "fresh2",
+   "file": "real_3.jpg",
+   "y": 0,
+   "p": 0.2671
+  },
+  {
+   "set": "fresh2",
+   "file": "real_4.jpg",
+   "y": 0,
+   "p": 0.0274
+  },
+  {
+   "set": "fresh2",
+   "file": "real_5.jpg",
+   "y": 0,
+   "p": 0.1181
+  },
+  {
+   "set": "fresh2",
+   "file": "real_6.jpg",
+   "y": 0,
+   "p": 0.0114
+  },
+  {
+   "set": "fresh2",
+   "file": "real_7.jpg",
+   "y": 0,
+   "p": 0.1327
+  },
+  {
+   "set": "fresh2",
+   "file": "real_8.jpg",
+   "y": 0,
+   "p": 0.0596
+  },
+  {
+   "set": "fresh2",
+   "file": "real_9.jpg",
+   "y": 0,
+   "p": 0.0879
+  }
+ ]
+}

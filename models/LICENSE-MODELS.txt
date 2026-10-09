@@ -1,7 +1,43 @@
-The model weights in this folder are copyright 2026 Ritabrata Maiti and are licensed under
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0):
-https://creativecommons.org/licenses/by-nc/4.0/
+Model files in this folder
+=========================
 
-They were distilled from Smogy/SMOGY-Ai-images-detector (CC BY-NC 4.0) and
-Oxidane/tmr-ai-text-detector (MIT), and initialised from google/bert_uncased_L-4_H-256_A-4
-(Apache-2.0) and apple/mobilevit-xx-small (Apple Sample Code License; notice retained).
+Text detector: text_body.onnx, text_emb_int4.bin, text_emb_scale_f16.bin, text_bpe.json
+  Derived from fakespot-ai/roberta-base-ai-text-detection-v1
+  (https://huggingface.co/fakespot-ai/roberta-base-ai-text-detection-v1), itself fine-tuned from
+  FacebookAI/roberta-base. Licensed under the Apache License, Version 2.0:
+  https://www.apache.org/licenses/LICENSE-2.0
+
+  Changes made by Ritabrata Maiti (2026):
+  - fine-tuned briefly on human and AI-written text, then averaged 50/50 with the original weights;
+  - exported to ONNX with word embeddings split out and stored as int4 (one fp16 scale per 32 values);
+  - transformer weights quantised to 4-bit and 8-bit blocks (MatMulNBits), 24 most sensitive matrices at 8-bit.
+  The tokenizer vocabulary and merges (text_bpe.json) are unchanged from the original model.
+
+Image detector: image_cf384_nb8.onnx
+  Derived from OwensLab/commfor-model-384 (Community Forensics, https://github.com/JeongsooP/Community-Forensics).
+  Changes made by Ritabrata Maiti (2026): exported to ONNX and weights quantised to 8-bit blocks (MatMulNBits).
+  Licensed under the MIT License:
+
+  MIT License
+
+  Copyright (c) 2025 Jeongsoo Park
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+Runtime: ort/ and ort_gpu/ contain ONNX Runtime Web 1.30 (MIT, Microsoft Corporation).

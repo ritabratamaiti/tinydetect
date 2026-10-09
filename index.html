@@ -40,7 +40,7 @@ th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}th{b
  <div class="pane" id="p-text">
   <div class="ex">Try an example: <button class="chip" data-ex="human">Human (Mark Twain, 1883)</button><button class="chip" data-ex="ai">AI-written</button></div>
   <textarea id="txt" placeholder="Paste text here. Works best with 100+ words."></textarea>
-  <div class="row"><span class="meta" id="st-text">Loading model…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
+  <div class="row"><span class="meta" id="st-text">Loading model (about 90 MB, saved for next time)…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
   <div class="res" id="r-text"></div>
  </div>
  <div class="pane" id="p-image" style="display:none">
@@ -48,7 +48,7 @@ th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}th{b
   <img id="imgprev" alt=""><div class="meta" id="st-image" style="margin-top:10px"></div><div class="res" id="r-image"></div>
  </div>
 </div>
-<section class="b" id="benchmarks"><h2>Benchmarks</h2><p class="sub">Measured on held-out data and on fresh samples the models never saw during training.</p><div id="bench"></div></section>
-<footer><span>TinyDetect · Ritabrata Maiti</span><span><a href="https://github.com/ritabratamaiti/tinydetect">Code &amp; method</a> · Models CC BY-NC 4.0</span></footer>
-<script src="ort/ort.wasm.min.js"></script><script src="app.js"></script>
+<section class="b" id="benchmarks"><h2>Benchmarks</h2><p class="sub">Measured on fresh samples collected outside the training data, using the compressed models exactly as they run in your browser.</p><div id="bench"></div></section>
+<footer><span>TinyDetect · Ritabrata Maiti</span><span><a href="https://github.com/ritabratamaiti/tinydetect">Code &amp; method</a> · Models Apache-2.0 (text) and MIT (image)</span></footer>
+<script src="boot.js"></script>
 </body></html>
