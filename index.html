@@ -1,54 +1,201 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TinyDetect — AI detection that runs in your browser</title>
+<title>TinyDetect: check text and images for AI, on your own device</title>
+<meta name="description" content="Check whether text or an image was made by AI. TinyDetect runs in your browser, so what you check never leaves your computer.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f8f7f5;--ink:#14201e;--mut:#5b6663;--line:#e4e1dc;--card:#fff;--org:#ff6106;--orgs:#fee3da;--grn:#15502e;--red:#c2410c;--amb:#b45309}
-*{box-sizing:border-box}html,body{margin:0}body{font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
-a{color:inherit}header{display:flex;justify-content:space-between;align-items:center;max-width:1080px;margin:0 auto;padding:20px 24px}
-.logo{font-weight:600;font-size:19px;letter-spacing:-.2px}.logo span{color:var(--org)}nav a{margin-left:22px;text-decoration:none;color:var(--ink);font-size:15px}nav a:hover{color:var(--org)}
-.hero{max-width:1080px;margin:0 auto;padding:36px 24px 8px;text-align:center}
-h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(40px,6vw,64px);line-height:1.05;margin:0 0 14px;letter-spacing:-.5px}
-.lede{color:var(--mut);font-size:18px;max-width:640px;margin:0 auto}
-.tool{max-width:860px;margin:30px auto 0;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(20,32,30,.04),0 8px 30px rgba(20,32,30,.06);overflow:hidden}
-.tabs{display:flex;border-bottom:1px solid var(--line)}.tab{flex:1;padding:14px;background:none;border:0;font:500 15px "IBM Plex Sans",sans-serif;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent}
+:root{--bg:#f8f7f5;--ink:#14201e;--mut:#5b6663;--line:#e4e1dc;--card:#fff;--org:#ff6106;--orgs:#ffe9dd;--grn:#15502e;--red:#c2410c;--amb:#b45309;--dark:#14201e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{margin:0}body{font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:inherit}.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:20;background:rgba(248,247,245,.92);backdrop-filter:blur(8px);border-bottom:1px solid transparent}
+header .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.logo{font-weight:600;font-size:19px;letter-spacing:-.2px;text-decoration:none}.logo span{color:var(--org)}
+nav{display:flex;align-items:center;gap:26px}nav a{text-decoration:none;font-size:15px}nav a:hover{color:var(--org)}
+.btn{display:inline-block;background:var(--org);color:#fff!important;border:0;border-radius:8px;padding:10px 18px;font:500 15px "IBM Plex Sans",sans-serif;text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)!important;border:1px solid var(--ink)}.btn.dark{background:var(--dark)}
+@media(max-width:760px){nav a:not(.btn){display:none}}
+.pill{display:inline-flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 14px 5px 6px;font-size:14px;text-decoration:none}
+.pill b{background:var(--orgs);color:var(--red);font-weight:600;font-size:12px;border-radius:999px;padding:2px 9px}
+.hero{text-align:center;padding:48px 0 0}
+h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(42px,6.4vw,72px);line-height:1.02;margin:18px 0 16px;letter-spacing:-.6px}
+h1 em,h2 em{font-style:italic;color:var(--org)}
+.lede{color:var(--mut);font-size:19px;max-width:620px;margin:0 auto}
+.tool{max-width:880px;margin:34px auto 0;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(20,32,30,.04),0 12px 40px rgba(20,32,30,.08);overflow:hidden;text-align:left}
+.tabs{display:flex;border-bottom:1px solid var(--line)}.tab{flex:1;padding:15px;background:none;border:0;font:500 15px "IBM Plex Sans",sans-serif;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent}
 .tab.on{color:var(--ink);border-bottom-color:var(--org)}
 .pane{padding:18px}.ex{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;font-size:14px;color:var(--mut)}
 .chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 12px;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink);cursor:pointer}.chip:hover{border-color:var(--org)}
-textarea{width:100%;min-height:220px;border:0;background:#f3f3f3;border-radius:8px;padding:14px;font:15px/1.6 "IBM Plex Sans",sans-serif;color:var(--ink);resize:vertical;outline:none}
+textarea{width:100%;min-height:220px;border:0;background:#f3f3f1;border-radius:10px;padding:14px;font:15px/1.6 "IBM Plex Sans",sans-serif;color:var(--ink);resize:vertical;outline:none}
 .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px}.meta{font-size:13px;color:var(--mut)}
-.go{background:var(--org);color:#fff;border:0;border-radius:6px;padding:11px 22px;font:500 15px "IBM Plex Sans",sans-serif;cursor:pointer}.go:disabled{opacity:.55;cursor:default}
-.drop{border:1.5px dashed #cfcac2;border-radius:10px;padding:40px 18px;text-align:center;color:var(--mut);cursor:pointer;background:#fbfaf8}.drop.hov{border-color:var(--org);background:#fff7f2}
-.drop b{color:var(--ink);font-weight:500}#imgprev{max-width:100%;max-height:320px;display:none;margin:14px auto 0;border-radius:8px}
+.go{background:var(--org);color:#fff;border:0;border-radius:8px;padding:11px 22px;font:500 15px "IBM Plex Sans",sans-serif;cursor:pointer}.go:disabled{opacity:.55;cursor:default}
+.drop{border:1.5px dashed #cfcac2;border-radius:12px;padding:44px 18px;text-align:center;color:var(--mut);cursor:pointer;background:#fbfaf8}.drop.hov{border-color:var(--org);background:#fff7f2}
+.drop b{color:var(--ink);font-weight:500}#imgprev{max-width:100%;max-height:320px;display:none;margin:14px auto 0;border-radius:10px}
 .res{display:none;margin-top:16px;border-top:1px solid var(--line);padding-top:16px}
-.verdict{display:flex;align-items:baseline;gap:12px}.vlabel{font-family:"Instrument Serif",Georgia,serif;font-size:32px;line-height:1}.vpct{font-size:15px;color:var(--mut)}
+.verdict{display:flex;align-items:baseline;gap:12px}.vlabel{font-family:"Instrument Serif",Georgia,serif;font-size:34px;line-height:1}.vpct{font-size:15px;color:var(--mut)}
 .meter{height:8px;border-radius:4px;background:#ece9e4;margin:12px 0 6px;overflow:hidden}.fill{height:100%;border-radius:4px}
 .scale{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}.small{font-size:13px;color:var(--mut);margin-top:10px}
-section.b{max-width:860px;margin:64px auto 0;padding:0 24px}h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:40px;margin:0 0 6px;letter-spacing:-.3px}
-.sub{color:var(--mut);margin:0 0 18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:22px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}.stat .n{font-family:"Instrument Serif",Georgia,serif;font-size:38px;line-height:1}.stat .l{font-size:13.5px;color:var(--mut);margin-top:6px}
-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px;margin-bottom:16px}
-th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}th{background:#f3f1ed;font-weight:500;color:var(--mut);font-size:13px}tr:last-child td{border-bottom:0}td.k{font-weight:600}
-.note{font-size:14px;color:var(--mut)}footer{max-width:860px;margin:56px auto 40px;padding:18px 24px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-</style></head><body>
-<header><div class="logo">Tiny<span>Detect</span></div><nav><a href="#benchmarks">Benchmarks</a><a href="https://github.com/ritabratamaiti/tinydetect">GitHub</a></nav></header>
-<div class="hero"><h1>AI detection, small enough<br>to run on your device.</h1>
-<p class="lede">Check text and images for signs of AI generation. The models load into your browser, so what you check stays on your computer.</p></div>
-<div class="tool">
- <div class="tabs"><button class="tab on" data-t="text">Text</button><button class="tab" data-t="image">Image</button></div>
- <div class="pane" id="p-text">
-  <div class="ex">Try an example: <button class="chip" data-ex="human">Human (Mark Twain, 1883)</button><button class="chip" data-ex="ai">AI-written</button></div>
-  <textarea id="txt" placeholder="Paste text here. Works best with 100+ words."></textarea>
-  <div class="row"><span class="meta" id="st-text">Loading model (about 90 MB, saved for next time)…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
-  <div class="res" id="r-text"></div>
+.under{font-size:13.5px;color:var(--mut);margin:14px 0 0}
+section{padding:96px 0 0}.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--org);margin:0 0 10px}
+h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(34px,4.6vw,52px);line-height:1.05;margin:0 0 14px;letter-spacing:-.4px}
+.intro{color:var(--mut);font-size:18px;max-width:640px;margin:0 0 34px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.step{border-top:1px solid var(--ink);padding-top:16px}.step .n{font-family:"Instrument Serif",Georgia,serif;font-size:30px;color:var(--org)}.step h3{font-size:19px;font-weight:600;margin:6px 0 8px}.step p{color:var(--mut);margin:0}
+.prods{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column}
+.card h3{font-size:20px;font-weight:600;margin:14px 0 6px}.card p{color:var(--mut);margin:0 0 14px}.card .foot{margin-top:auto;display:flex;align-items:center;gap:10px}
+.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px}.tag.now{background:#e1f0e6;color:var(--grn)}.tag.soon{background:var(--orgs);color:var(--red)}
+.mock{height:190px;border-radius:12px;background:#f3f1ed;position:relative;overflow:hidden}
+/* image button mock */
+.pic{position:absolute;inset:16px 60px 16px 16px;border-radius:10px;background:radial-gradient(circle at 70% 30%,#ffd29a 0 18%,transparent 19%),linear-gradient(160deg,#9fc7d9 0%,#d9c3e8 48%,#f0b98a 100%)}
+.pic:after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;border-radius:0 0 10px 10px;background:linear-gradient(180deg,transparent,rgba(30,40,60,.35)),repeating-linear-gradient(100deg,#6f8f6a 0 14px,#7c9c74 14px 28px)}
+.pinbtn{position:absolute;top:26px;right:72px;background:var(--org);color:#fff;font-size:13px;font-weight:600;border-radius:999px;padding:6px 12px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.pinres{position:absolute;bottom:26px;left:28px;background:#fff;border-radius:10px;padding:8px 12px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.18)}.pinres b{color:var(--red)}
+.side{position:absolute;top:16px;right:14px;width:34px;display:flex;flex-direction:column;gap:8px}.side i{display:block;height:34px;border-radius:8px;background:#e4e0d9}
+/* highlight mock */
+.doc{position:absolute;inset:16px;background:#fff;border-radius:10px;padding:16px 18px}.ln{height:9px;border-radius:5px;background:#e9e6e0;margin:0 0 10px}.ln.hl{background:#ffd9c2}
+.menu{position:absolute;left:44%;top:70px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.14);font-size:13px;min-width:200px}
+.menu div{padding:7px 12px;color:var(--mut)}.menu div.on{color:var(--ink);background:#fff3ec;font-weight:500}
+/* inbox mock */
+.mail{position:absolute;inset:16px;display:flex;flex-direction:column;gap:8px}.mrow{background:#fff;border-radius:9px;padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:13px}
+.av{width:24px;height:24px;border-radius:50%;background:#d9d4cb;flex:none}.mrow span{flex:1;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 8px;white-space:nowrap}.b-ai{background:#fde3d6;color:var(--red)}.b-h{background:#e1f0e6;color:var(--grn)}.b-m{background:#f3ead0;color:var(--amb)}
+/* docs mock */
+.dpage{position:absolute;inset:16px 120px 16px 16px;background:#fff;border-radius:10px;padding:16px 18px}.dside{position:absolute;top:16px;right:16px;bottom:16px;width:96px;background:#fff;border-radius:10px;padding:12px 10px;font-size:12px}
+.ring{width:54px;height:54px;border-radius:50%;margin:6px auto 8px;background:conic-gradient(var(--grn) 0 82%,#e9e6e0 82%);display:grid;place-items:center}.ring i{width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;font-style:normal;font-weight:600;color:var(--grn)}
+/* sdk mock */
+.code{position:absolute;inset:16px;background:#14201e;border-radius:10px;padding:14px 16px;font:12.5px/1.7 ui-monospace,Consolas,monospace;color:#d6dbd9}.code .k{color:#ff9b63}.code .s{color:#9fd4a8}.code .c{color:#7d8a87}
+/* receipt mock */
+.rcpt{position:absolute;left:50%;top:16px;bottom:16px;transform:translateX(-50%);width:230px;background:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px}
+.rcpt .t{font-family:"Instrument Serif",Georgia,serif;font-size:20px;margin-bottom:6px}.rcpt .r{display:flex;justify-content:space-between;color:var(--mut);border-bottom:1px dashed var(--line);padding:4px 0}
+.rcpt .ok{margin-top:8px;color:var(--grn);font-weight:600}
+.uses{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.use{background:var(--card);padding:22px}.use h3{font-size:18px;font-weight:600;margin:0 0 6px}.use p{color:var(--mut);margin:0;font-size:15px}
+.band{background:var(--dark);color:#f3f1ed;border-radius:20px;padding:46px 40px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+.band h2{color:#fff}.band p{color:#b9c2bf;margin:0}.band ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}.band li{border-top:1px solid #33413e;padding-top:12px;color:#d6dbd9}.band li b{color:#fff;font-weight:600}
+@media(max-width:760px){.band{grid-template-columns:1fr;padding:32px 24px}}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column}.plan.feat{border:2px solid var(--org)}
+.plan h3{font-size:20px;font-weight:600;margin:0 0 4px}.plan .who{color:var(--mut);font-size:14.5px;margin:0 0 16px}.plan .price{font-family:"Instrument Serif",Georgia,serif;font-size:34px;line-height:1;margin:0 0 16px}
+.plan ul{padding:0 0 0 18px;margin:0 0 20px;color:var(--mut);font-size:15px}.plan li{margin:4px 0}.plan .btn{margin-top:auto;text-align:center}.btn[aria-disabled]{opacity:.6;cursor:default}
+details{border-bottom:1px solid var(--line);padding:18px 0}summary{cursor:pointer;font-size:18px;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:16px}summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--org);font-size:24px;line-height:1}details[open] summary:after{content:"–"}details p{color:var(--mut);margin:10px 0 0;max-width:760px}
+.faq{max-width:860px}
+footer{margin-top:96px;border-top:1px solid var(--line);padding:28px 0 40px;font-size:14px;color:var(--mut)}footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style></head>
+<body>
+<header><div class="wrap"><a class="logo" href="#">Tiny<span>Detect</span></a>
+<nav><a href="#products">Products</a><a href="#uses">Use cases</a><a href="#plans">Plans</a><a href="#faq">FAQ</a><a class="btn" href="#check">Check for AI</a></nav></div></header>
+
+<main class="wrap">
+<div class="hero" id="check">
+ <a class="pill" href="#products"><b>Coming soon</b> Image Check: a one-click AI check on any image you see online</a>
+ <h1>Was this made by AI?<br><em>Check it on your own device.</em></h1>
+ <p class="lede">Paste text or drop in an image. TinyDetect runs in your browser, so whatever you check stays on your computer.</p>
+ <div class="tool">
+  <div class="tabs"><button class="tab on" data-t="text">Text</button><button class="tab" data-t="image">Image</button></div>
+  <div class="pane" id="p-text">
+   <div class="ex">Try an example: <button class="chip" data-ex="human">Human (Mark Twain, 1883)</button><button class="chip" data-ex="ai">AI-written</button></div>
+   <textarea id="txt" placeholder="Paste an essay, email, post or article. Works best with 100+ words."></textarea>
+   <div class="row"><span class="meta" id="st-text">Loading the detector (first visit only)…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
+   <div class="res" id="r-text"></div>
+  </div>
+  <div class="pane" id="p-image" style="display:none">
+   <div class="drop" id="drop"><b>Drop an image here</b> or click to upload<br><span style="font-size:13px">JPG, PNG or WebP</span><input type="file" id="file" accept="image/*" hidden></div>
+   <img id="imgprev" alt=""><div class="meta" id="st-image" style="margin-top:10px"></div><div class="res" id="r-image"></div>
+  </div>
  </div>
- <div class="pane" id="p-image" style="display:none">
-  <div class="drop" id="drop"><b>Drop an image here</b> or click to upload<br><span style="font-size:13px">JPG, PNG or WebP</span><input type="file" id="file" accept="image/*" hidden></div>
-  <img id="imgprev" alt=""><div class="meta" id="st-image" style="margin-top:10px"></div><div class="res" id="r-image"></div>
- </div>
+ <p class="under">Free, no sign-up. A score is a reason to look closer, not proof on its own.</p>
 </div>
-<section class="b" id="benchmarks"><h2>Benchmarks</h2><p class="sub">Measured on fresh samples collected outside the training data, using the compressed models exactly as they run in your browser.</p><div id="bench"></div></section>
-<footer><span>TinyDetect · Ritabrata Maiti</span><span><a href="https://github.com/ritabratamaiti/tinydetect">Code &amp; method</a> · Models Apache-2.0 (text) and MIT (image)</span></footer>
+
+<section id="why">
+ <p class="eyebrow">Why TinyDetect</p>
+ <h2>Detection that doesn't need<br>your data.</h2>
+ <p class="intro">Most AI checkers send what you paste to their servers. That's a problem for student essays, job applications, client documents and private photos. TinyDetect does the work where the content already is.</p>
+ <div class="steps">
+  <div class="step"><div class="n">01</div><h3>Stays on your device</h3><p>The detector downloads once and runs in your browser. Nothing you check is uploaded or stored by us.</p></div>
+  <div class="step"><div class="n">02</div><h3>Text and images</h3><p>One place to check essays, emails and articles, and photos, artwork and profile pictures.</p></div>
+  <div class="step"><div class="n">03</div><h3>Quick after the first load</h3><p>Once the detector is on your device, checks take moments and keep working when you're offline.</p></div>
+ </div>
+</section>
+
+<section id="products">
+ <p class="eyebrow">Products</p>
+ <h2>AI checks where you <em>already</em> work.</h2>
+ <p class="intro">The web checker is live. The rest are on the way, built on the same on-device detector.</p>
+ <div class="prods">
+  <div class="card"><div class="mock"><div class="pic"></div><div class="pinbtn">✓ Check</div><div class="pinres">Likely AI-generated · <b>97%</b></div><div class="side"><i></i><i></i><i></i></div></div>
+   <h3>Image Check for Chrome</h3><p>Hover over any image on any site and a Check button appears, like a save button. One click shows how likely it is that the image was made by AI. Works on news sites, social feeds, marketplaces and dating apps.</p>
+   <div class="foot"><span class="tag soon">Coming soon</span></div></div>
+  <div class="card"><div class="mock"><div class="doc"><div class="ln" style="width:92%"></div><div class="ln hl" style="width:86%"></div><div class="ln hl" style="width:90%"></div><div class="ln hl" style="width:60%"></div><div class="ln" style="width:80%"></div><div class="ln" style="width:70%"></div></div>
+   <div class="menu"><div>Copy</div><div>Search Google for “…”</div><div class="on">Check with TinyDetect</div></div></div>
+   <h3>Highlight to check</h3><p>Select any text on a web page, right-click and check it. Reviews, forum posts, LinkedIn messages and articles, without copying anything into another site.</p>
+   <div class="foot"><span class="tag soon">Coming soon</span></div></div>
+  <div class="card"><div class="mock"><div class="mail">
+    <div class="mrow"><i class="av"></i><span>Application: Senior Analyst, cover letter attached</span><b class="badge b-ai">Likely AI</b></div>
+    <div class="mrow"><i class="av"></i><span>Re: Q3 proposal, a few thoughts from our side</span><b class="badge b-h">Human</b></div>
+    <div class="mrow"><i class="av"></i><span>Quick question about the listing</span><b class="badge b-m">Mixed</b></div>
+    <div class="mrow"><i class="av"></i><span>Weekly update from the team</span><b class="badge b-h">Human</b></div></div></div>
+   <h3>Inbox and hiring</h3><p>A small label next to emails, cover letters and proposals in Gmail and Outlook, so you can see at a glance which ones were written with AI. Applications and client mail never leave your machine.</p>
+   <div class="foot"><span class="tag soon">Coming soon</span></div></div>
+  <div class="card"><div class="mock"><div class="dpage"><div class="ln" style="width:50%;height:12px;background:#d9d4cb"></div><div class="ln" style="width:94%"></div><div class="ln" style="width:88%"></div><div class="ln" style="width:91%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:85%"></div></div>
+   <div class="dside"><b style="font-size:12px">TinyDetect</b><div class="ring"><i>Human</i></div><div style="color:var(--mut);text-align:center">Checked just now</div></div></div>
+   <h3>Google Docs and Word add-on</h3><p>Check a whole document from a sidebar, section by section. Made for teachers marking essays and editors reviewing submissions.</p>
+   <div class="foot"><span class="tag soon">Coming soon</span></div></div>
+  <div class="card"><div class="mock"><div class="rcpt"><div class="t">Writing receipt</div><div class="r"><span>Typed</span><span>2 h 14 min</span></div><div class="r"><span>Sessions</span><span>5</span></div><div class="r"><span>Pasted text</span><span>3%</span></div><div class="ok">✓ Written by hand</div></div></div>
+   <h3>Writing receipts</h3><p>For writers and students who want to show their work is their own. The extension records how a document was written, on your device, and creates a receipt you can share with a teacher, editor or client.</p>
+   <div class="foot"><span class="tag soon">Coming soon</span></div></div>
+  <div class="card"><div class="mock"><div class="code"><span class="c">// runs in the user's browser, no API calls</span><br><span class="k">import</span> { detect } <span class="k">from</span> <span class="s">"tinydetect"</span>;<br><br><span class="k">const</span> r = <span class="k">await</span> detect.image(file);<br><span class="k">if</span> (r.ai &gt; <span class="s">0.9</span>) flagForReview(post);</div></div>
+   <h3>SDK for platforms</h3><p>Add AI checks to your app, marketplace or community without sending user content to a third party. Runs in your users' browsers or on your own servers, with no per-check fees.</p>
+   <div class="foot"><span class="tag soon">Coming soon</span></div></div>
+ </div>
+</section>
+
+<section id="uses">
+ <p class="eyebrow">Use cases</p>
+ <h2>Built for people who<br>can't send content to the cloud.</h2>
+ <p class="intro">Privacy rules make cloud detectors hard to use in a lot of places. On-device checks avoid that.</p>
+ <div class="uses">
+  <div class="use"><h3>Teachers and schools</h3><p>Check student work without uploading it to another company. Easier to approve under student data rules.</p></div>
+  <div class="use"><h3>Recruiters</h3><p>See which cover letters and take-home tasks were written with AI. Candidate data stays on your laptop.</p></div>
+  <div class="use"><h3>Editors and publishers</h3><p>Screen pitches, submissions and reader photos before they run.</p></div>
+  <div class="use"><h3>Trust and safety</h3><p>Spot AI-generated profile photos, listings and reviews on your platform.</p></div>
+  <div class="use"><h3>Legal and compliance</h3><p>Review documents that can't leave the building, including on machines with no internet.</p></div>
+  <div class="use"><h3>Everyone else</h3><p>Check the viral photo, the too-good listing or the suspicious message before you share it or reply.</p></div>
+ </div>
+</section>
+
+<section>
+ <div class="band">
+  <div><p class="eyebrow">Private by design</p><h2>Your content never<br>reaches our servers.</h2><p>We don't run servers that see what you check. The detector is a file your browser downloads, like a font or an image.</p></div>
+  <ul><li><b>No uploads.</b> Text and images are read in the browser tab and nowhere else.</li><li><b>No account.</b> Nothing to sign up for to use the web checker.</li><li><b>Works offline.</b> After the first visit, checks run without a connection.</li></ul>
+ </div>
+</section>
+
+<section id="plans">
+ <p class="eyebrow">Plans</p>
+ <h2>Start free.</h2>
+ <p class="intro">The web checker is free. Paid plans for the extension, teams and developers are coming.</p>
+ <div class="plans">
+  <div class="plan"><h3>Free</h3><p class="who">For anyone</p><div class="price">Free</div><ul><li>Text and image checks</li><li>Runs in your browser</li><li>No account needed</li></ul><a class="btn ghost" href="#check">Check now</a></div>
+  <div class="plan feat"><h3>Pro</h3><p class="who">For people who check every day</p><div class="price">Soon</div><ul><li>Image Check and Highlight to check</li><li>Check whole files and folders at once</li><li>Gmail, Outlook and Docs add-ons</li></ul><span class="btn" aria-disabled="true">Coming soon</span></div>
+  <div class="plan"><h3>Teams</h3><p class="who">For schools, newsrooms and companies</p><div class="price">Soon</div><ul><li>Everything in Pro for your team</li><li>Install on managed devices</li><li>Writing receipts for students</li></ul><span class="btn dark" aria-disabled="true">Coming soon</span></div>
+  <div class="plan"><h3>Developers</h3><p class="who">For apps and platforms</p><div class="price">Soon</div><ul><li>JavaScript and Python SDK</li><li>Runs in browsers or on your servers</li><li>Flat licence, no per-check fees</li></ul><span class="btn dark" aria-disabled="true">Coming soon</span></div>
+ </div>
+</section>
+
+<section id="faq" class="faq">
+ <p class="eyebrow">FAQ</p>
+ <h2>Questions</h2>
+ <details open><summary>Is my text or image uploaded anywhere?</summary><p>No. The detector runs inside your browser tab. Your text and images are read on your computer and are not sent to us or anyone else.</p></details>
+ <details><summary>Why does the first check take a while?</summary><p>On your first visit the browser downloads the detector, which is about the size of a short video. After that it's saved on your device, so the page opens and checks run quickly, even offline.</p></details>
+ <details><summary>Can I rely on the result?</summary><p>No AI detector is right every time. Very short text, heavily edited writing, screenshots and cropped images are harder to judge. Treat a high score as a reason to look closer or ask questions, not as proof, especially when someone's grade or job depends on it.</p></details>
+ <details><summary>Which AI tools can it spot?</summary><p>The text detector learned from writing by many chatbots, including ChatGPT, Llama and Gemma, and we test it on newer ones such as Claude. The image detector learned from pictures made by thousands of image generators, and we test it on Midjourney, DALL·E 3 and Flux.</p></details>
+ <details><summary>Does it work on my phone?</summary><p>Yes, in a recent version of Chrome, Edge, Safari or Firefox. It's quickest on a laptop or desktop.</p></details>
+ <details><summary>Can my school or company use it?</summary><p>Yes, the web checker is free for anyone. Team installs, add-ons and the developer SDK are coming soon.</p></details>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 TinyDetect · Ritabrata Maiti</span><span><a href="https://github.com/ritabratamaiti/tinydetect">GitHub</a></span></div></footer>
 <script src="boot.js"></script>
 </body></html>

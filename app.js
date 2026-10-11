@@ -53,5 +53,4 @@ const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();['dragover','d
 drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files[0])handle(ev.dataTransfer.files[0]);});file.onchange=()=>file.files[0]&&handle(file.files[0]);
 function handle(f){const u=URL.createObjectURL(f);const img=$('imgprev');img.style.display='block';img.onload=async()=>{$('st-image').textContent='Checking…';const t0=performance.now();try{const p=await scoreImage(img);$('st-image').textContent='';show($('r-image'),p,'Checked in '+Math.round(performance.now()-t0)+' ms. Screenshots, crops and heavy edits are harder to judge.');}catch(e){$('st-image').textContent=e.message;}};img.src=u;}
 // ---------- boot
-(async()=>{try{const t0=performance.now();await loadText();$('gotext').disabled=false;$('st-text').textContent='Ready';}catch(e){$('st-text').textContent='Model failed to load: '+e.message;}
- try{const R=await fetch('results.json').then(r=>r.json());$('bench').innerHTML=R.html;}catch(e){}})();
+(async()=>{try{const t0=performance.now();await loadText();$('gotext').disabled=false;$('st-text').textContent='Ready';}catch(e){$('st-text').textContent='Model failed to load: '+e.message;}})();
