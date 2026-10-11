@@ -97,7 +97,7 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding:28px 0 40px;font
   <div class="pane" id="p-text">
    <div class="ex">Try an example: <button class="chip" data-ex="human">Human (Mark Twain, 1883)</button><button class="chip" data-ex="ai">AI-written</button></div>
    <textarea id="txt" placeholder="Paste an essay, email, post or article. Works best with 100+ words."></textarea>
-   <div class="row"><span class="meta" id="st-text">Loading the detector (first visit only)…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
+   <div class="row"><span class="meta" id="st-text">Loading the detector…</span><button class="go" id="gotext" disabled>Check for AI</button></div>
    <div class="res" id="r-text"></div>
   </div>
   <div class="pane" id="p-image" style="display:none">
@@ -105,48 +105,48 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding:28px 0 40px;font
    <img id="imgprev" alt=""><div class="meta" id="st-image" style="margin-top:10px"></div><div class="res" id="r-image"></div>
   </div>
  </div>
- <p class="under">Free, no sign-up. A score is a reason to look closer, not proof on its own.</p>
+ <p class="under">Free, no sign-up. AI-generated text isn't inherently bad. What matters is whether it's accurate, useful and honest about how it was made. A detector score can't tell you that or prove who wrote it.</p>
 </div>
 
 <section id="why">
  <p class="eyebrow">Why TinyDetect</p>
  <h2>Detection that doesn't need<br>your data.</h2>
- <p class="intro">Most AI checkers send what you paste to their servers. That's a problem for student essays, job applications, client documents and private photos. TinyDetect does the work where the content already is.</p>
+ <p class="intro">Uploading student essays, job applications, client documents or private photos to a detector may not be an option. TinyDetect checks them locally in your browser.</p>
  <div class="steps">
   <div class="step"><div class="n">01</div><h3>Stays on your device</h3><p>The detector downloads once and runs in your browser. Nothing you check is uploaded or stored by us.</p></div>
   <div class="step"><div class="n">02</div><h3>Text and images</h3><p>One place to check essays, emails and articles, and photos, artwork and profile pictures.</p></div>
-  <div class="step"><div class="n">03</div><h3>Quick after the first load</h3><p>Once the detector is on your device, checks take moments and keep working when you're offline.</p></div>
+  <div class="step"><div class="n">03</div><h3>Models cached on your device</h3><p>Your browser caches the model files for later visits. Speed depends on your device. Once a detector has loaded, you can use it offline while the tab stays open.</p></div>
  </div>
 </section>
 
 <section id="products">
  <p class="eyebrow">Products</p>
  <h2>AI checks where you <em>already</em> work.</h2>
- <p class="intro">The web checker is live. The rest are on the way, built on the same on-device detector.</p>
+ <p class="intro">Only the web checker is available today. These are previews of planned tools, not working integrations.</p>
  <div class="prods">
-  <div class="card"><div class="mock"><div class="pic"></div><div class="pinbtn">✓ Check</div><div class="pinres">Likely AI-generated · <b>97%</b></div><div class="side"><i></i><i></i><i></i></div></div>
-   <h3>Image Check for Chrome</h3><p>Hover over any image on any site and a Check button appears, like a save button. One click shows how likely it is that the image was made by AI. Works on news sites, social feeds, marketplaces and dating apps.</p>
+  <div class="card"><div class="mock"><div class="pic"></div><div class="pinbtn">✓ Check</div><div class="pinres">Likely AI-generated · <b>97/100</b></div><div class="side"><i></i><i></i><i></i></div></div>
+   <h3>Image Check for Chrome</h3><p>A planned Chrome extension for checking images without leaving the page. Hover over an image and click Check to see the detector's score.</p>
    <div class="foot"><span class="tag soon">Coming soon</span></div></div>
   <div class="card"><div class="mock"><div class="doc"><div class="ln" style="width:92%"></div><div class="ln hl" style="width:86%"></div><div class="ln hl" style="width:90%"></div><div class="ln hl" style="width:60%"></div><div class="ln" style="width:80%"></div><div class="ln" style="width:70%"></div></div>
    <div class="menu"><div>Copy</div><div>Search Google for “…”</div><div class="on">Check with TinyDetect</div></div></div>
-   <h3>Highlight to check</h3><p>Select any text on a web page, right-click and check it. Reviews, forum posts, LinkedIn messages and articles, without copying anything into another site.</p>
+   <h3>Highlight to check</h3><p>A planned text extension: select a passage on a web page, right-click and check it without copying it into another site.</p>
    <div class="foot"><span class="tag soon">Coming soon</span></div></div>
   <div class="card"><div class="mock"><div class="mail">
     <div class="mrow"><i class="av"></i><span>Application: Senior Analyst, cover letter attached</span><b class="badge b-ai">Likely AI</b></div>
     <div class="mrow"><i class="av"></i><span>Re: Q3 proposal, a few thoughts from our side</span><b class="badge b-h">Human</b></div>
-    <div class="mrow"><i class="av"></i><span>Quick question about the listing</span><b class="badge b-m">Mixed</b></div>
+    <div class="mrow"><i class="av"></i><span>Quick question about the listing</span><b class="badge b-m">Unclear</b></div>
     <div class="mrow"><i class="av"></i><span>Weekly update from the team</span><b class="badge b-h">Human</b></div></div></div>
-   <h3>Inbox and hiring</h3><p>A small label next to emails, cover letters and proposals in Gmail and Outlook, so you can see at a glance which ones were written with AI. Applications and client mail never leave your machine.</p>
+   <h3>Inbox and hiring</h3><p>Planned Gmail and Outlook add-ons for checking messages locally. Scores would be prompts for review, not a basis for rejecting applicants or judging someone's ability.</p>
    <div class="foot"><span class="tag soon">Coming soon</span></div></div>
   <div class="card"><div class="mock"><div class="dpage"><div class="ln" style="width:50%;height:12px;background:#d9d4cb"></div><div class="ln" style="width:94%"></div><div class="ln" style="width:88%"></div><div class="ln" style="width:91%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:85%"></div></div>
    <div class="dside"><b style="font-size:12px">TinyDetect</b><div class="ring"><i>Human</i></div><div style="color:var(--mut);text-align:center">Checked just now</div></div></div>
-   <h3>Google Docs and Word add-on</h3><p>Check a whole document from a sidebar, section by section. Made for teachers marking essays and editors reviewing submissions.</p>
+   <h3>Google Docs and Word add-on</h3><p>A planned sidebar for checking documents section by section. For reviewing writing with its author, not deciding whether someone cheated.</p>
    <div class="foot"><span class="tag soon">Coming soon</span></div></div>
-  <div class="card"><div class="mock"><div class="rcpt"><div class="t">Writing receipt</div><div class="r"><span>Typed</span><span>2 h 14 min</span></div><div class="r"><span>Sessions</span><span>5</span></div><div class="r"><span>Pasted text</span><span>3%</span></div><div class="ok">✓ Written by hand</div></div></div>
-   <h3>Writing receipts</h3><p>For writers and students who want to show their work is their own. The extension records how a document was written, on your device, and creates a receipt you can share with a teacher, editor or client.</p>
+  <div class="card"><div class="mock"><div class="rcpt"><div class="t">Writing receipt</div><div class="r"><span>Typed</span><span>2 h 14 min</span></div><div class="r"><span>Sessions</span><span>5</span></div><div class="r"><span>Pasted text</span><span>3%</span></div><div class="ok">Writing history recorded</div></div></div>
+   <h3>Writing receipts</h3><p>A planned, opt-in record of writing sessions and edits, stored on your device. Share it to give context about your process, not as proof that no AI was used.</p>
    <div class="foot"><span class="tag soon">Coming soon</span></div></div>
   <div class="card"><div class="mock"><div class="code"><span class="c">// runs in the user's browser, no API calls</span><br><span class="k">import</span> { detect } <span class="k">from</span> <span class="s">"tinydetect"</span>;<br><br><span class="k">const</span> r = <span class="k">await</span> detect.image(file);<br><span class="k">if</span> (r.ai &gt; <span class="s">0.9</span>) flagForReview(post);</div></div>
-   <h3>SDK for platforms</h3><p>Add AI checks to your app, marketplace or community without sending user content to a third party. Runs in your users' browsers or on your own servers, with no per-check fees.</p>
+   <h3>SDK for platforms</h3><p>A planned SDK for adding checks to your app, marketplace or community. The goal is to run in users' browsers or on your own servers without sending content to a third-party detector.</p>
    <div class="foot"><span class="tag soon">Coming soon</span></div></div>
  </div>
 </section>
@@ -154,13 +154,13 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding:28px 0 40px;font
 <section id="uses">
  <p class="eyebrow">Use cases</p>
  <h2>Built for people who<br>can't send content to the cloud.</h2>
- <p class="intro">Privacy rules make cloud detectors hard to use in a lot of places. On-device checks avoid that.</p>
+ <p class="intro">Local checks avoid uploading content to a detector. Your organisation's privacy and usage policies still apply.</p>
  <div class="uses">
-  <div class="use"><h3>Teachers and schools</h3><p>Check student work without uploading it to another company. Easier to approve under student data rules.</p></div>
-  <div class="use"><h3>Recruiters</h3><p>See which cover letters and take-home tasks were written with AI. Candidate data stays on your laptop.</p></div>
+  <div class="use"><h3>Teachers and schools</h3><p>Discuss writing and AI use with students without uploading their work. A score isn't evidence of misconduct.</p></div>
+  <div class="use"><h3>Recruiters</h3><p>Review writing samples locally. Judge candidates on their skills and the work itself, not a detector score.</p></div>
   <div class="use"><h3>Editors and publishers</h3><p>Screen pitches, submissions and reader photos before they run.</p></div>
-  <div class="use"><h3>Trust and safety</h3><p>Spot AI-generated profile photos, listings and reviews on your platform.</p></div>
-  <div class="use"><h3>Legal and compliance</h3><p>Review documents that can't leave the building, including on machines with no internet.</p></div>
+  <div class="use"><h3>Trust and safety</h3><p>Flag profile photos, listings and reviews for a closer look. AI use alone doesn't make them fraudulent.</p></div>
+  <div class="use"><h3>Legal and compliance</h3><p>Review sensitive documents locally. After loading the detector, checks can run in the open tab without an internet connection.</p></div>
   <div class="use"><h3>Everyone else</h3><p>Check the viral photo, the too-good listing or the suspicious message before you share it or reply.</p></div>
  </div>
 </section>
@@ -168,7 +168,7 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding:28px 0 40px;font
 <section>
  <div class="band">
   <div><p class="eyebrow">Private by design</p><h2>Your content never<br>reaches our servers.</h2><p>We don't run servers that see what you check. The detector is a file your browser downloads, like a font or an image.</p></div>
-  <ul><li><b>No uploads.</b> Text and images are read in the browser tab and nowhere else.</li><li><b>No account.</b> Nothing to sign up for to use the web checker.</li><li><b>Works offline.</b> After the first visit, checks run without a connection.</li></ul>
+  <ul><li><b>No content uploads.</b> Text and images are processed in the browser tab. The page downloads models, runtime files and Google Fonts.</li><li><b>No account.</b> Nothing to sign up for to use the web checker.</li><li><b>Offline checks in an open tab.</b> Load the detector you need before disconnecting. Reopening the page still needs a connection.</li></ul>
  </div>
 </section>
 
@@ -188,11 +188,12 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding:28px 0 40px;font
  <p class="eyebrow">FAQ</p>
  <h2>Questions</h2>
  <details open><summary>Is my text or image uploaded anywhere?</summary><p>No. The detector runs inside your browser tab. Your text and images are read on your computer and are not sent to us or anyone else.</p></details>
- <details><summary>Why does the first check take a while?</summary><p>On your first visit the browser downloads the detector, which is about the size of a short video. After that it's saved on your device, so the page opens and checks run quickly, even offline.</p></details>
+ <details><summary>Why does the first check take a while?</summary><p>The browser downloads the model files and prepares the detector. It caches those files for later visits, but still needs to load the model into memory when you reopen the page. Speed depends on your device. Offline checks work in an open tab after the detector you need has loaded; reopening the page needs a connection.</p></details>
+ <details><summary>Is AI-generated text a bad thing?</summary><p>No. AI can help with drafts, translation and editing. What matters is the quality of the work and whether its use is disclosed when the context calls for it. A detector can't judge accuracy, effort or intent, and a high score isn't proof of deception.</p></details>
  <details><summary>Can I rely on the result?</summary><p>No AI detector is right every time. Very short text, heavily edited writing, screenshots and cropped images are harder to judge. Treat a high score as a reason to look closer or ask questions, not as proof, especially when someone's grade or job depends on it.</p></details>
  <details><summary>Which AI tools can it spot?</summary><p>The text detector learned from writing by many chatbots, including ChatGPT, Llama and Gemma, and we test it on newer ones such as Claude. The image detector learned from pictures made by thousands of image generators, and we test it on Midjourney, DALL·E 3 and Flux.</p></details>
- <details><summary>Does it work on my phone?</summary><p>Yes, in a recent version of Chrome, Edge, Safari or Firefox. It's quickest on a laptop or desktop.</p></details>
- <details><summary>Can my school or company use it?</summary><p>Yes, the web checker is free for anyone. Team installs, add-ons and the developer SDK are coming soon.</p></details>
+ <details><summary>Does it work on my phone?</summary><p>It may, depending on your browser and available memory. The models can be demanding on phones; try a laptop or desktop if loading fails or checks are slow.</p></details>
+ <details><summary>Can my school or company use it?</summary><p>The public web checker is free to try. Self-hosting and reuse are subject to the <a href="https://github.com/ritabratamaiti/tinydetect/blob/main/LICENSE.md">code licence</a> and separate model licences. Team installs, add-ons and a commercially licensed SDK are planned.</p></details>
 </section>
 </main>
 

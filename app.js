@@ -2,7 +2,7 @@
 ort.env.wasm.wasmPaths=new URL(window.ORT_DIR||'ort/',location.href).href; ort.env.wasm.numThreads=self.crossOriginIsolated?Math.min(4,navigator.hardwareConcurrency||1):1;
 const EP=window.USE_WEBGPU?['webgpu','wasm']:['wasm'];
 const $=id=>document.getElementById(id);
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));$('p-text').style.display=b.dataset.t==='text'?'':'none';$('p-image').style.display=b.dataset.t==='image'?'':'none';if(b.dataset.t==='image')loadImage().then(()=>$('st-image').textContent='');});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));$('p-text').style.display=b.dataset.t==='text'?'':'none';$('p-image').style.display=b.dataset.t==='image'?'':'none';if(b.dataset.t==='image'&&!imageRequest){$('st-image').textContent='Loading the image detector...';loadImage().then(()=>{if(!imageRequest)$('st-image').textContent='Ready';}).catch(e=>{if(!imageRequest)$('st-image').textContent='Model failed to load: '+e.message;});}});
 function f16(h){const s=(h&0x8000)?-1:1,e=(h>>10)&31,m=h&1023;if(e===0)return s*Math.pow(2,-14)*(m/1024);if(e===31)return m?NaN:s*Infinity;return s*Math.pow(2,e-15)*(1+m/1024);}
 async function bin(u){const r=await fetch(u);if(!r.ok)throw new Error(u+' '+r.status);return new Uint8Array(await r.arrayBuffer());}
 // Port of clean_text() from fakespot-ai/roberta-base-ai-text-detection-v1 utils.py (Apache-2.0): the detector was trained on text cleaned this way.
@@ -31,12 +31,12 @@ async function scoreText(text){
  const logits=[];for(const w of wins){const x=[TX.tok.bos,...w,TX.tok.eos];
   const o=await TX.sess.run({inputs_embeds:new ort.Tensor('float32',embed(x),[1,x.length,TXT.dim]),attention_mask:new ort.Tensor('int64',new BigInt64Array(x.length).fill(1n),[1,x.length])});
   const p=Math.min(Math.max(o.probs.data[1],1e-6),1-1e-6);logits.push(Math.log(p/(1-p)));}
- const l=logits.reduce((a,b)=>a+b,0)/logits.length;return {p:1/(1+Math.exp(-(TXT.a*l+TXT.b))),n:ids.length,w:logits.length};}
+ const l=logits.reduce((a,b)=>a+b,0)/logits.length;return {p:1/(1+Math.exp(-(TXT.a*l+TXT.b))),n:wins.reduce((n,w)=>n+w.length,0),total:ids.length,w:logits.length};}
 // ---------- image
 let IM=null,imgLoading=null;
 // Image: Community Forensics ViT-S/16 @384 (MIT), 8-bit block weights. Preprocess = resize short side to 440, centre crop 384, ImageNet norm.
 const IMG={file:'models/image_cf384_nb8.onnx',size:384,resize:440,mean:[0.485,0.456,0.406],std:[0.229,0.224,0.225],a:0.5872,b:2.9691};
-function loadImage(){if(!imgLoading)imgLoading=ort.InferenceSession.create(IMG.file,{executionProviders:EP}).then(async s=>{IM=s;const S=IMG.size;await s.run({pixel_values:new ort.Tensor('float32',new Float32Array(3*S*S),[1,3,S,S])});});/* warm-up run compiles WebGPU shaders before the first real check */return imgLoading;}
+function loadImage(){if(!imgLoading)imgLoading=ort.InferenceSession.create(IMG.file,{executionProviders:EP}).then(async s=>{const S=IMG.size;await s.run({pixel_values:new ort.Tensor('float32',new Float32Array(3*S*S),[1,3,S,S])});IM=s;}).catch(e=>{imgLoading=null;throw e;});/* warm-up run compiles WebGPU shaders before the first real check */return imgLoading;}
 async function scoreImage(img){await loadImage();const S=IMG.size,w=img.naturalWidth,h=img.naturalHeight,k=IMG.resize/Math.min(w,h),cw=S/k,ch=S/k;
  const c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(img,(w-cw)/2,(h-ch)/2,cw,ch,0,0,S,S);
  const d=g.getImageData(0,0,S,S).data,N=S*S,x=new Float32Array(3*N),[m0,m1,m2]=IMG.mean,[s0,s1,s2]=IMG.std;for(let j=0;j<N;j++){x[j]=(d[4*j]/255-m0)/s0;x[N+j]=(d[4*j+1]/255-m1)/s1;x[2*N+j]=(d[4*j+2]/255-m2)/s2;}
@@ -45,12 +45,21 @@ async function scoreImage(img){await loadImage();const S=IMG.size,w=img.naturalW
 const EX={human:"That was a dismal revelation to me; for my memory was never loaded with anything but blank cartridges. However, I did not feel discouraged long. I judged that it was best to make some allowances, for doubtless Mr. Bixby was 'stretching.' Presently he pulled a rope and struck a few strokes on the big bell. The stars were all gone now, and the night was as black as ink. I could hear the wheels churn along the bank, but I was not entirely certain that I could see the shore.",
 ai:"Remote work has fundamentally changed how teams collaborate. While many organizations initially viewed it as a temporary measure, it has evolved into a long-term strategy for attracting and retaining talent. Employees value the flexibility to structure their day around both professional and personal commitments, and studies consistently show that productivity can remain high when clear expectations are established. However, remote work also presents challenges, including feelings of isolation and difficulties in maintaining company culture."};
 document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{$('txt').value=EX[c.dataset.ex];$('gotext').click();});
-function show(el,p,meta){const pct=Math.round(p*100);const v=p>=0.9?['AI-generated','var(--red)']:p>=0.6?['Possibly AI','var(--amb)']:p>=0.3?['Unclear','var(--mut)']:['Human','var(--grn)'];
- el.style.display='block';el.innerHTML='<div class="verdict"><span class="vlabel" style="color:'+v[1]+'">'+v[0]+'</span><span class="vpct">'+pct+'% AI likelihood</span></div><div class="meter"><div class="fill" style="width:'+Math.max(3,pct)+'%;background:'+v[1]+'"></div></div><div class="scale"><span>Human</span><span>AI</span></div><div class="small">'+meta+'</div>';}
+function show(el,p,meta){const pct=Math.round(p*100);const v=p>=0.9?['Likely AI-generated','var(--red)']:p>=0.6?['Possibly AI','var(--amb)']:p>=0.3?['Unclear','var(--mut)']:['Likely human','var(--grn)'];
+ el.style.display='block';el.innerHTML='<div class="verdict"><span class="vlabel" style="color:'+v[1]+'">'+v[0]+'</span><span class="vpct">'+pct+'/100 AI score</span></div><div class="meter"><div class="fill" style="width:'+Math.max(3,pct)+'%;background:'+v[1]+'"></div></div><div class="scale"><span>Human</span><span>AI</span></div><div class="small">'+meta+'</div>';}
 $('gotext').onclick=async()=>{const t=$('txt').value.trim();if(!t)return;$('gotext').disabled=true;const t0=performance.now();
- try{const r=await scoreText(t);show($('r-text'),r.p,'Checked '+r.n+' tokens in '+Math.round(performance.now()-t0)+' ms. Short or heavily edited text is harder to judge.');}catch(e){$('st-text').textContent=e.message;}$('gotext').disabled=false;};
+ $('r-text').style.display='none';$('st-text').textContent='Checking...';
+ try{const r=await scoreText(t);const coverage=r.n<r.total?'Checked only the first '+r.n+' of '+r.total+' tokens; the rest was not analysed. ':'Checked '+r.n+' tokens. ';show($('r-text'),r.p,coverage+'Time: '+Math.round(performance.now()-t0)+' ms. Short or heavily edited text is harder to judge.');$('st-text').textContent=r.n<r.total?'Partial check: see the coverage note below.':'Ready';}catch(e){$('st-text').textContent=e.message;}$('gotext').disabled=false;};
 const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();['dragover','dragenter'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('hov');}));['dragleave','drop'].forEach(e=>drop.addEventListener(e,()=>drop.classList.remove('hov')));
 drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files[0])handle(ev.dataTransfer.files[0]);});file.onchange=()=>file.files[0]&&handle(file.files[0]);
-function handle(f){const u=URL.createObjectURL(f);const img=$('imgprev');img.style.display='block';img.onload=async()=>{$('st-image').textContent='Checking…';const t0=performance.now();try{const p=await scoreImage(img);$('st-image').textContent='';show($('r-image'),p,'Checked in '+Math.round(performance.now()-t0)+' ms. Screenshots, crops and heavy edits are harder to judge.');}catch(e){$('st-image').textContent=e.message;}};img.src=u;}
+let imageRequest=0,imageQueue=Promise.resolve();
+async function handle(f){const request=++imageRequest;const preview=$('imgprev');preview.style.display='none';preview.removeAttribute('src');$('r-image').style.display='none';$('st-image').textContent='Loading image...';
+ let u;const t0=performance.now();
+ try{u=URL.createObjectURL(f);const img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error('Could not read this image. Please choose a valid JPG, PNG or WebP file.'));img.src=u;});
+  if(request!==imageRequest)return;preview.src=u;preview.style.display='block';$('st-image').textContent='Checking...';
+  const check=()=>request===imageRequest?scoreImage(img):null;imageQueue=imageQueue.then(check,check);const p=await imageQueue;
+  if(request!==imageRequest)return;$('st-image').textContent='';show($('r-image'),p,'Checked in '+Math.round(performance.now()-t0)+' ms. Screenshots, crops and heavy edits are harder to judge.');
+ }catch(e){if(request===imageRequest){preview.style.display='none';$('st-image').textContent=e.message;}}
+ finally{if(u)URL.revokeObjectURL(u);}}
 // ---------- boot
 (async()=>{try{const t0=performance.now();await loadText();$('gotext').disabled=false;$('st-text').textContent='Ready';}catch(e){$('st-text').textContent='Model failed to load: '+e.message;}})();
