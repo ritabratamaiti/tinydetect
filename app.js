@@ -25,13 +25,13 @@ async function loadText(){
 function embed(ids){const D=TXT.dim,B=TXT.block,nb=D/B,half=D/2,{emb,scale}=TX;const out=new Float32Array(ids.length*D);
  ids.forEach((id,r)=>{const o=r*D,base=id*half,sb=id*nb;for(let j=0;j<half;j++){const v=emb[base+j],k=2*j,s=scale[sb+((k/B)|0)];out[o+k]=((v&15)-8)*s;out[o+k+1]=((v>>4)-8)*s;}});return out;}
 async function scoreText(text){
- const ids=TX.tok.encode(cleanText(text));if(ids.length<8)throw new Error('Please paste a longer passage.');
+ const clean=cleanText(text),words=(clean.match(/\S+/g)||[]).length;const ids=TX.tok.encode(clean);if(ids.length<8)throw new Error('Please paste a longer passage.');
  const W=TXT.win,wins=[];for(let i=0;i<ids.length&&wins.length<TXT.maxWin;i+=W)wins.push(ids.slice(i,i+W));
  if(wins.length>1&&wins[wins.length-1].length<64)wins.pop();
  const logits=[];for(const w of wins){const x=[TX.tok.bos,...w,TX.tok.eos];
   const o=await TX.sess.run({inputs_embeds:new ort.Tensor('float32',embed(x),[1,x.length,TXT.dim]),attention_mask:new ort.Tensor('int64',new BigInt64Array(x.length).fill(1n),[1,x.length])});
   const p=Math.min(Math.max(o.probs.data[1],1e-6),1-1e-6);logits.push(Math.log(p/(1-p)));}
- const l=logits.reduce((a,b)=>a+b,0)/logits.length;return {p:1/(1+Math.exp(-(TXT.a*l+TXT.b))),n:wins.reduce((n,w)=>n+w.length,0),total:ids.length,w:logits.length};}
+ const l=logits.reduce((a,b)=>a+b,0)/logits.length;return {p:1/(1+Math.exp(-(TXT.a*l+TXT.b))),n:wins.reduce((n,w)=>n+w.length,0),total:ids.length,words,w:logits.length};}
 // ---------- image
 let IM=null,imgLoading=null;
 // Image: Community Forensics ViT-S/16 @384 (MIT), 8-bit block weights. Preprocess = resize short side to 440, centre crop 384, ImageNet norm.
@@ -49,7 +49,7 @@ function show(el,p,meta){const pct=Math.round(p*100);const v=p>=0.9?['Likely AI-
  el.style.display='block';el.innerHTML='<div class="verdict"><span class="vlabel" style="color:'+v[1]+'">'+v[0]+'</span><span class="vpct">'+pct+'/100 AI score</span></div><div class="meter"><div class="fill" style="width:'+Math.max(3,pct)+'%;background:'+v[1]+'"></div></div><div class="scale"><span>Human</span><span>AI</span></div><div class="small">'+meta+'</div>';}
 $('gotext').onclick=async()=>{const t=$('txt').value.trim();if(!t)return;$('gotext').disabled=true;const t0=performance.now();
  $('r-text').style.display='none';$('st-text').textContent='Checking...';
- try{const r=await scoreText(t);const coverage=r.n<r.total?'Checked only the first '+r.n+' of '+r.total+' tokens; the rest was not analysed. ':'Checked '+r.n+' tokens. ';show($('r-text'),r.p,coverage+'Time: '+Math.round(performance.now()-t0)+' ms. Short or heavily edited text is harder to judge.');$('st-text').textContent=r.n<r.total?'Partial check: see the coverage note below.':'Ready';}catch(e){$('st-text').textContent=e.message;}$('gotext').disabled=false;};
+ try{const r=await scoreText(t);const fmt=x=>x.toLocaleString('en-US'),part=r.n<r.total,seen=Math.max(1,Math.round(r.words*r.n/r.total));const coverage=part?'<b>Partial check: only about the first '+fmt(seen)+' of '+fmt(r.words)+' words were analysed. The rest was not checked, so split longer documents into parts.</b><br>':'Checked all '+fmt(r.words)+' words. ';show($('r-text'),r.p,coverage+'Time: '+Math.round(performance.now()-t0)+' ms. Short or heavily edited text is harder to judge.');$('st-text').textContent=part?'Partial check: only the first part of your text was analysed.':'Ready';}catch(e){$('st-text').textContent=e.message;}$('gotext').disabled=false;};
 const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();['dragover','dragenter'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('hov');}));['dragleave','drop'].forEach(e=>drop.addEventListener(e,()=>drop.classList.remove('hov')));
 drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files[0])handle(ev.dataTransfer.files[0]);});file.onchange=()=>file.files[0]&&handle(file.files[0]);
 let imageRequest=0,imageQueue=Promise.resolve();
